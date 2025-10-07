@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/normalize.css">
   <link rel="stylesheet" href="styles/styles.css">
+  <link rel="stylesheet" href="styles/main-page.css">
 </head>
 <body>
   <header class="site-header">
@@ -36,41 +37,47 @@
     </div>
   </header>
 
-  <main>
-    <h1>iNEW ARRIVALS!</h1>
-  </main>
+  <div class="split">
+    <a class="panel left" href="https://tu-enlace-celeste.com">
+      <img src="assets/icons/article.svg" alt="Celeste Femenina" class="goto-celeste">
+    </a>
+
+    <a class="panel right" href="https://tu-enlace-mewave.com">
+      <img src="assets/icons/mewave-logo.svg" alt="mewave" class="goto-mewave">
+    </a>
+  </div>
 
   <footer class="site-footer">
-  <div class="footer-top">
-    <div class="footer-left">
-      <img src="logo.png" alt="Celeste x mewave" class="footer-logo">
-      <p>Una alianza entre madre e hijo y sus tiendas de ropa, vestimos para que tengas estilo.</p>
+    <div class="footer-top">
+      <div class="footer-left">
+        <img src="assets/icons/celestexmewave.svg" alt="Celeste x mewave" class="footer-logo">
+        <p>Una alianza entre madre e hijo y sus tiendas de ropa, vestimos para que tengas estilo.</p>
+      </div>
+
+      <div class="footer-right">
+        <ul class="contacto-celeste">
+          <li><img src="assets/icons/whatsappicon.svg" alt="Whatsapp"> +57 3113464324</li>
+          <li><img src="assets/icons/instagramicon.svg" alt="Instagram"> @celestafemenina</li>
+          <li><img src="assets/icons/facebookicon.svg" alt="Facebook"> Celesta Femenina</li>
+        </ul>
+        <ul class="contacto-mewave">
+          <li><img src="assets/icons/whatsappicon.svg" alt="Whatsapp"> +57 3103478044</li>
+          <li><img src="assets/icons/instagramicon.svg" alt="Instagram"> @mewave.co</li>
+        </ul>
+      </div>
     </div>
 
-    <div class="footer-right">
-      <ul class="contacto-celeste">
-        <li><img src="assets/icons/whatsappicon.svg" alt="Whatsapp"> +57 3113464324</li>
-        <li><img src="assets/icons/instagramicon.svg" alt="Instagram"> @celestafemenina</li>
-        <li><img src="assets/icons/facebookicon.svg" alt="Facebook"> Celesta Femenina</li>
-      </ul>
-      <ul class="contacto-mewave">
-        <li><img src="assets/icons/whatsappicon.svg" alt="Whatsapp"> +57 3103478044</li>
-        <li><img src="assets/icons/instagramicon.svg" alt="Instagram"> @mewave.co</li>
-      </ul>
-    </div>
-  </div>
+    <hr style="margin:0; border:none; border-top:1px solid #ccc;">
 
-  <hr style="margin:0; border:none; border-top:1px solid #ccc;">
-
-  <div class="footer-bottom">
-    <p>celestxmewave.com © 2010 - 2025, todos los derechos reservados</p>
-    <div class="payment-methods">
-      <img id="visa" src="assets/icons/visa.svg" alt="Visa">
-      <img id="mastercard" src="assets/icons/mastercard.svg" alt="Mastercard">
-      <img id="applepay" src="assets/icons/applepay.svg" alt="Apple Pay">
-      <img id="nequi" src="assets/icons/nequi.svg" alt="Nequi">
+    <div class="footer-bottom">
+      <p>celestxmewave.com © 2010 - 2025, todos los derechos reservados</p>
+      <div class="payment-methods">
+        <img id="visa" src="assets/icons/visa.svg" alt="Visa">
+        <img id="mastercard" src="assets/icons/mastercard.svg" alt="Mastercard">
+        <img id="applepay" src="assets/icons/applepay.svg" alt="Apple Pay">
+        <img id="nequi" src="assets/icons/nequi.svg" alt="Nequi">
+      </div>
     </div>
-  </div>
-</footer>
+  </footer>
 </body>
 </html>

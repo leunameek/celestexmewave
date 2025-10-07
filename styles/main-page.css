@@ -1,0 +1,106 @@
+:root{
+  --pink:#F15D8D;
+  --black:#000;
+  --fg:#fff;
+  --divider:2px;
+  --speed:.35s;
+  --gap:28px;
+  --arrow:36px;
+}
+
+.split{
+  position:relative;
+  display:flex;
+  height:100vh;
+  overflow:hidden;
+}
+
+.split::before{
+  content:"";
+  position:absolute; inset:0;
+  width:var(--divider);
+  left:50%; transform:translateX(-50%);
+  z-index:3;
+}
+
+.panel{
+  position:relative;
+  flex:1 1 50%;
+  display:grid;
+  place-items:center;
+  transition:flex-basis var(--speed) ease;
+  color:var(--fg);
+  text-decoration:none;
+  isolation:isolate;
+}
+.panel.left  { background:var(--pink); }
+.panel.right { background:var(--black); }
+
+.panel img{
+  max-width:min(42vw, 460px);
+  width:100%;
+  height:auto;
+  transition:transform var(--speed) ease, opacity var(--speed) ease;
+}
+
+.panel .cta{
+  position:absolute;
+  top:50%;
+  color:var(--fg);
+  font:600 14px/1.1 system-ui, sans-serif;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  writing-mode:vertical-rl;
+  opacity:0;
+  transform:translateY(-50%) translateX(0);
+  transition:opacity var(--speed) ease, transform var(--speed) ease;
+  pointer-events:none;
+  z-index:4;
+}
+
+.panel.left  .cta{ right:calc(var(--divider) + var(--gap) + var(--arrow) + 10px); }
+.panel.right .cta{ left: calc(var(--divider) + var(--gap) + var(--arrow) + 10px); transform:translateY(-50%) rotate(180deg); }
+
+.panel::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:var(--arrow); height:var(--arrow);
+  border-top:4px solid var(--fg);
+  border-right:4px solid var(--fg);
+  opacity:0;
+  transform:translateY(-50%) scale(.9) rotate(45deg);
+  transition:opacity var(--speed) ease, transform var(--speed) ease;
+  z-index:4;
+}
+.panel.right::after{
+  left:calc(var(--divider) + var(--gap));
+  transform:translateY(-50%) scale(.9) rotate(-135deg);
+}
+.panel.left::after{
+  right:calc(var(--divider) + var(--gap));
+}
+
+.split:has(.left .goto-celeste:hover) .left  { flex-basis:65%; }
+.split:has(.left .goto-celeste:hover) .right { flex-basis:35%; }
+.split:has(.left .goto-celeste:hover) .left .cta,
+.split:has(.left .goto-celeste:hover) .left::after{
+  opacity:1;
+  transform:translateY(-50%) scale(1) rotate(45deg);
+}
+.split:has(.left .goto-celeste:hover) .right img{ transform:scale(.86); opacity:.6; }
+
+.split:has(.right .goto-mewave:hover) .right { flex-basis:65%; }
+.split:has(.right .goto-mewave:hover) .left  { flex-basis:35%; }
+.split:has(.right .goto-mewave:hover) .right .cta,
+.split:has(.right .goto-mewave:hover) .right::after{
+  opacity:1;
+  transform:translateY(-50%) scale(1) rotate(-135deg);
+}
+.split:has(.right .goto-mewave:hover) .left img{ transform:scale(.86); opacity:.6; }
+
+@media (max-width:900px){
+  :root{ --gap:18px; --arrow:26px; }
+  .panel img{ max-width:min(44vw, 360px); }
+}
