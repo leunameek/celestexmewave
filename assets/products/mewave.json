@@ -1,0 +1,119 @@
+[
+  {
+    "category": "Camisetas",
+    "name": "Camiseta Oversize de Gato",
+    "description": "Camiseta oversize con un divertido diseño de gato, perfecta para un look casual y cómodo.",
+    "price": 65000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 15,
+    "image": "../assets/images/camiseta1.png"
+  },
+  {
+    "category": "Camisetas",
+    "name": "Camiseta Blanca",
+    "description": "Camiseta básica blanca de algodón, ideal para combinar con cualquier outfit.",
+    "price": 65000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 20,
+    "image": "../assets/images/camiseta2.png"
+  },
+  {
+    "category": "Camisetas",
+    "name": "Camiseta Verde",
+    "description": "Camiseta verde vibrante, fresca y moderna para días soleados.",
+    "price": 65000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 12,
+    "image": "../assets/images/camiseta3.png"
+  },
+  {
+    "category": "Camisetas",
+    "name": "Camiseta Negra",
+    "description": "Camiseta negra clásica, versátil y elegante para cualquier ocasión.",
+    "price": 65000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 18,
+    "image": "../assets/images/camiseta4.png"
+  },
+  {
+    "category": "Jeans",
+    "name": "Jean Efectivo Lavado",
+    "description": "Jean con lavado efectivo, estilo desgastado para un look urbano.",
+    "price": 200000,
+    "sizes": ["28", "30", "32", "34", "36"],
+    "available_units": 10,
+    "image": "../assets/images/jean1.png"
+  },
+  {
+    "category": "Jeans",
+    "name": "Jean Azul Rey",
+    "description": "Jean azul rey clásico, cómodo y duradero para el día a día.",
+    "price": 200000,
+    "sizes": ["28", "30", "32", "34", "36"],
+    "available_units": 8,
+    "image": "../assets/images/jean2.png"
+  },
+  {
+    "category": "Jeans",
+    "name": "Jean Con Rayas",
+    "description": "Jean con detalles en rayas, añade un toque único a tu estilo.",
+    "price": 200000,
+    "sizes": ["28", "30", "32", "34", "36"],
+    "available_units": 14,
+    "image": "../assets/images/jean3.png"
+  },
+  {
+    "category": "Jeans",
+    "name": "Jean Azul Claro",
+    "description": "Jean azul claro, ligero y perfecto para climas cálidos.",
+    "price": 200000,
+    "sizes": ["28", "30", "32", "34", "36"],
+    "available_units": 16,
+    "image": "../assets/images/jean4.png"
+  },
+  {
+    "category": "Accesorios",
+    "name": "Gorra Shark Jean",
+    "description": "Gorra con diseño de tiburón, ideal para un estilo deportivo y casual.",
+    "price": 50000,
+    "sizes": ["Única"],
+    "available_units": 25,
+    "image": "../assets/images/gorra1.png"
+  },
+  {
+    "category": "Accesorios",
+    "name": "Gorra Cafe Desgastada",
+    "description": "Gorra café con efecto desgastado, añade carácter a tu look.",
+    "price": 45000,
+    "sizes": ["Única"],
+    "available_units": 20,
+    "image": "../assets/images/gorra2.png"
+  },
+  {
+    "category": "Accesorios",
+    "name": "Gorra Maya Azul",
+    "description": "Gorra azul con patrón maya, fresca y con estilo étnico.",
+    "price": 50000,
+    "sizes": ["Única"],
+    "available_units": 22,
+    "image": "../assets/images/gorra3.png"
+  },
+  {
+    "category": "Accesorios",
+    "name": "Gorra Brooklyn",
+    "description": "Gorra inspirada en Brooklyn, urbana y moderna.",
+    "price": 50000,
+    "sizes": ["Única"],
+    "available_units": 18,
+    "image": "../assets/images/gorra4.png"
+  },
+  {
+    "category": "Camisetas",
+    "name": "Camiseta Oversize de Gato",
+    "description": "Camiseta oversize con un divertido diseño de gato, perfecta para un look casual y cómodo.",
+    "price": 65000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 15,
+    "image": "../assets/images/camiseta1.png"
+  }
+]
