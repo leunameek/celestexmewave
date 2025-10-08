@@ -104,3 +104,40 @@
   :root{ --gap:18px; --arrow:26px; }
   .panel img{ max-width:min(44vw, 360px); }
 }
+
+@media (max-width: 768px){
+  .split{
+    flex-direction: column;
+    height: auto;
+  }
+
+  .split::before{
+    display: none;
+  }
+
+  .panel{
+    flex-basis: auto;
+    min-height: 46vh;
+  }
+
+  .panel img{
+    max-width: min(80vw, 420px);
+  }
+
+  .panel::after,
+  .panel .cta{
+    display: none;
+  }
+
+  .split:has(.left .goto-celeste:hover) .left,
+  .split:has(.left .goto-celeste:hover) .right,
+  .split:has(.right .goto-mewave:hover) .right,
+  .split:has(.right .goto-mewave:hover) .left{
+    flex-basis: auto;
+  }
+  .split:has(.left .goto-celeste:hover) .right img,
+  .split:has(.right .goto-mewave:hover) .left img{
+    transform: none;
+    opacity: 1;
+  }
+}
