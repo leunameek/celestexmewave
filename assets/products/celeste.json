@@ -1,0 +1,200 @@
+[
+  {
+    "category": "Blusas",
+    "name": "Blusa Ancha Negra",
+    "description": "Blusa ancha de estilo oversize en color negro, perfecta para un look casual y moderno.",
+    "price": 75000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 20,
+    "image": "../assets/images/Blusa ancha Negra.png"
+  },
+  {
+    "category": "Blusas",
+    "name": "Blusa Café con Beige",
+    "description": "Blusa en tonos café y beige, ideal para combinar con pantalones o faldas.",
+    "price": 70000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 15,
+    "image": "../assets/images/blusa cafe con beige.png"
+  },
+  {
+    "category": "Blusas",
+    "name": "Blusa Negra",
+    "description": "Blusa básica negra elegante, versátil para cualquier ocasión.",
+    "price": 65000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 25,
+    "image": "../assets/images/Blusa Negra.png"
+  },
+  {
+    "category": "Blusas",
+    "name": "Blusa Rosa",
+    "description": "Blusa rosa fresca y femenina, añade un toque de color a tu outfit.",
+    "price": 68000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 18,
+    "image": "../assets/images/Blusa rosa.png"
+  },
+  {
+    "category": "Conjuntos",
+    "name": "Conjunto Café Oscuro",
+    "description": "Conjunto en tono café oscuro, cómodo y sofisticado para el día a día.",
+    "price": 120000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 12,
+    "image": "../assets/images/conjunto cafe oscuro.png"
+  },
+  {
+    "category": "Conjuntos",
+    "name": "Conjunto Café",
+    "description": "Conjunto en color café, perfecto para un estilo casual chic.",
+    "price": 115000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 14,
+    "image": "../assets/images/conjunto cafe.png"
+  },
+  {
+    "category": "Conjuntos",
+    "name": "Conjunto Verde Esmeralda",
+    "description": "Conjunto vibrante en verde esmeralda, ideal para destacar.",
+    "price": 125000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 10,
+    "image": "../assets/images/conjunto Verde esmralda.png"
+  },
+  {
+    "category": "Conjuntos",
+    "name": "Conjunto Verde",
+    "description": "Conjunto en tono verde, fresco y moderno.",
+    "price": 118000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 16,
+    "image": "../assets/images/Conjunto Verde.png"
+  },
+  {
+    "category": "Enterizos",
+    "name": "Enterizo Azul",
+    "description": "Enterizo azul cómodo y elegante, perfecto para ocasiones especiales.",
+    "price": 150000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 8,
+    "image": "../assets/images/Enterizo Azul.png"
+  },
+  {
+    "category": "Enterizos",
+    "name": "Enterizo Beige",
+    "description": "Enterizo beige neutro, versátil y sofisticado.",
+    "price": 145000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 11,
+    "image": "../assets/images/Enterizo Beige.png"
+  },
+  {
+    "category": "Enterizos",
+    "name": "Enterizo Blanco",
+    "description": "Enterizo blanco clásico, ideal para looks limpios y frescos.",
+    "price": 140000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 13,
+    "image": "../assets/images/Enterizo Blanco.png"
+  },
+  {
+    "category": "Enterizos",
+    "name": "Enterizo Negro",
+    "description": "Enterizo negro elegante, perfecto para eventos nocturnos.",
+    "price": 155000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 9,
+    "image": "../assets/images/EnterizoNegro.png"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Beige con Flores",
+    "description": "Vestido beige con detalles florales, romántico y delicado.",
+    "price": 95000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 17,
+    "image": "../assets/images/VestidoBeigeFlores.png"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Morado 1",
+    "description": "Vestido morado vibrante, añade misterio a tu estilo.",
+    "price": 90000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 19,
+    "image": "../assets/images/VestidoMorado1.png"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Morado 2",
+    "description": "Otro diseño en morado, único y elegante.",
+    "price": 92000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 15,
+    "image": "../assets/images/VestidoMorado2.png"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Morado 3",
+    "description": "Vestido morado con estilo moderno, perfecto para salidas.",
+    "price": 93000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 12,
+    "image": "../assets/images/VestidoMorado3.png"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Rojo 1",
+    "description": "Vestido rojo apasionado, destaca en cualquier evento.",
+    "price": 88000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 14,
+    "image": "../assets/images/VestidoRojo1.png"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Verde 1",
+    "description": "Vestido verde refrescante, ideal para días soleados.",
+    "price": 85000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 16,
+    "image": "../assets/images/VestidoVerde1.png"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Verde 3",
+    "description": "Vestido verde con diseño único, moderno y cómodo.",
+    "price": 87000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 13,
+    "image": "../assets/images/VestidoVerde3.png"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Verde 2",
+    "description": "Otro vestido verde, versátil y elegante.",
+    "price": 86000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 18,
+    "image": "../assets/images/VestidoVerdes2.png"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Rojo 2",
+    "description": "Vestido rojo con estilo diferente, audaz y chic.",
+    "price": 89000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 11,
+    "image": "../assets/images/VestioRojo2.png"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Rojo 3",
+    "description": "Vestido rojo sofisticado, perfecto para ocasiones especiales.",
+    "price": 91000,
+    "sizes": ["S", "M", "L", "XL"],
+    "available_units": 10,
+    "image": "../assets/images/VestiorRojo3.png"
+  }
+]

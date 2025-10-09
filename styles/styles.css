@@ -1,3 +1,13 @@
+@font-face {
+  font-family: 'Abigeta Display';
+  src: url('../assets/fonts/Abigeta Display.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'BASQUIAT';
+  src: url('../assets/fonts/BASQUIAT.otf') format('opentype');
+}
+
 * { box-sizing: border-box; }
 
 html, body { height: 100%; }

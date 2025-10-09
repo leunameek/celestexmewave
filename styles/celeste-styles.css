@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'Basquiat';
-  src: url('../assets/fonts/BASQUIAT.otf') format('opentype');
+  font-family: 'Abigeta Display';
+  src: url('../assets/fonts/Abigeta Display.otf') format('opentype');
 }
 
 main {
@@ -12,7 +12,8 @@ h1 {
   text-align: center;
   margin-bottom: 30px;
   font-size: 36px;
-  font-family: 'Basquiat', sans-serif !important;
+  font-family: 'Abigeta Display', sans-serif !important;
+  color: #F15D8D;
 }
 
 .titulo {
@@ -65,8 +66,9 @@ h1 {
 .categoria h2 {
   margin-bottom: 20px;
   font-size: 36px;
-  text-transform: uppercase;
-  font-family: 'Basquiat', sans-serif !important;
+  text-transform: downcase;
+  font-family: 'Abigeta Display', sans-serif !important;
+  color: #F15D8D;
 }
 
 .productos-grid {
@@ -91,7 +93,7 @@ h1 {
 }
 
 .producto-card .info {
-  background: #111;
+  background: #F15D8D;
   color: white;
   padding: 10px;
   display: flex;
@@ -132,5 +134,5 @@ h1 {
 }
 
 .producto-card button .cart-icon path {
-  fill: black;
+  fill: #F15D8D;
 }

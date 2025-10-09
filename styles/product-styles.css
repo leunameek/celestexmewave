@@ -1,0 +1,370 @@
+.container {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    gap: 20px;
+    padding: 20px;
+    margin: 60px;
+    min-height: calc(100vh - 120px);
+}
+
+.back-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    grid-column: 1 / -1;
+}
+
+.back-nav a {
+    color: #333;
+}
+
+.thumbnails {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 5px;
+    cursor: pointer;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.thumbnail.active {
+    border-color: #007bff;
+}
+
+.product-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.product-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    max-width: 100%;
+    max-height: 700px;
+    object-fit: contain;
+}
+
+.product-info h1 {
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.product-description {
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.rating {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.star {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ddd;
+    background-color: transparent;
+}
+
+.color-selector {
+    margin-bottom: 20px;
+}
+
+.color-selector h3 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.colors {
+    display: flex;
+    gap: 10px;
+}
+
+.color-option {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    cursor: pointer;
+}
+
+.color-green { background-color: #2d5a3d; }
+.color-brown { background-color: #8b7355; }
+.color-black { background-color: #2c2c2c; }
+
+.size-selector {
+    margin-bottom: 20px;
+}
+
+.size-selector h3 {
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.sizes {
+    width: 200px;
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.size-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #000000;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    width: 38px;
+    height: 23px;
+    font-size: 14px;
+}
+
+.size-option.active {
+    background-color: #000;
+    color: white;
+    border-color: #000;
+}
+
+.quantity-cart {
+    display: flex;
+    width: 200px;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #000;
+    border-radius: 4px;
+}
+
+.quantity-btn {
+    background-color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.quantity-input {
+    border: none;
+    width: 50px;
+    text-align: center;
+    padding: 8px;
+}
+
+.add-to-cart {
+    background-color: #2c2c2c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.go-to-cart {
+    background-color: #2c2c2c;
+    color: white;
+    align-items: center;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    width: 200px;
+    height: 30px;
+    justify-self: center;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar-title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+    font-family: 'BASQUIAT', sans-serif;
+}
+
+.sidebar-title.celeste-title {
+    font-size: 28px;
+    font-family: 'Abigeta Display', sans-serif;
+    color: #F15D8D;
+}
+
+.producto-card.celeste img {
+    height: 300px;
+}
+
+.producto-card.celeste .info {
+    background: #F15D8D;
+}
+
+.producto-card.celeste button .cart-icon path {
+    fill: #F15D8D;
+}
+
+.celeste-product .size-option.active {
+    background-color: #F15D8D;
+    border-color: #F15D8D;
+    color: white;
+}
+
+.celeste-product .quantity-selector {
+    border: 1px solid #F15D8D;
+}
+
+.celeste-product .add-to-cart {
+    background-color: #F15D8D;
+}
+
+.celeste-product .go-to-cart {
+    background-color: #F15D8D;
+}
+
+.celeste-product .price {
+    color: #F15D8D;
+}
+
+.celeste-product .rating i {
+    color: #F15D8D;
+}
+
+.celeste-product .size-option {
+    border-color: #F15D8D;
+    color: #F15D8D;
+}
+
+.celeste-product .quantity-btn {
+    color: #F15D8D;
+}
+
+.celeste-product .quantity-input {
+    color: #F15D8D;
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .product-main {
+        grid-template-columns: 1fr;
+    }
+    
+    .nav-menu {
+.producto-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.producto-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.producto-card .info {
+  background: #111;
+  color: white;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.producto-card p{
+  margin: 5px 0;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif !important;
+}
+.producto-card h3 {
+  font-weight: 400;
+  margin: 0;
+  font-size: 16px;
+}
+
+.producto-card .precio {
+  font-size: 24px;
+  font-family: 'Bebas Neue', sans-serif !important;
+}
+
+.producto-card button {
+  justify-content: center;
+  width: 60px;
+  height: 40px;
+  background: white;
+  border: none;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.producto-card button .cart-icon {
+  height: 32px;
+  width: 32px;
+}
+
+.producto-card button .cart-icon path {
+  fill: black;
+}
+        display: none;
+    }
+}
