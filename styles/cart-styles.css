@@ -1,0 +1,141 @@
+.cart-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  padding: 20px;
+  margin: 60px auto;
+  max-width: 1200px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.cart-left h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  background-color: #fff;
+}
+
+.item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-details h3 {
+  font-size: 18px;
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.item-details p {
+  font-size: 16px;
+  color: #666;
+  margin: 0 0 10px 0;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid #000;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.quantity-btn {
+  background-color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.quantity-input {
+  border: none;
+  width: 50px;
+  text-align: center;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.delete-btn {
+  background-color: #ff4081;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.delete-btn:hover {
+  background-color: #e73873;
+}
+
+.cart-right h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.order-summary {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
+}
+
+.proceed-btn {
+  background-color: #ff4081;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.proceed-btn:hover {
+  background-color: #e73873;
+}
+
+@media (max-width: 768px) {
+  .cart-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

@@ -1,8 +1,11 @@
 .perfil-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 60px;
   width: 90%;
   max-width: 1100px;
-  margin: 20px auto;
-  font-family: 'Poppins', sans-serif;
+  margin: 60px auto;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .back a {

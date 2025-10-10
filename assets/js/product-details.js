@@ -34,6 +34,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     quantityInput.textContent = qty + 1;
                 }
             });
+
+            // Add to cart functionality
+            const addToCartBtn = document.querySelector('.add-to-cart');
+            addToCartBtn.addEventListener('click', () => {
+                const qty = parseInt(quantityInput.textContent);
+                const selectedSize = document.querySelector('.size-option.active')?.textContent || '';
+                const selectedColor = document.querySelector('.color-option.active')?.classList[1] || ''; // e.g., color-green
+
+                const cartItem = {
+                    product: selectedProduct,
+                    quantity: qty,
+                    size: selectedSize,
+                    color: selectedColor
+                };
+
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                cart.push(cartItem);
+                localStorage.setItem('cart', JSON.stringify(cart));
+
+                alert('Producto añadido al carrito!');
+            });
          })
          .catch(error => console.error('Error loading products:', error));
  });

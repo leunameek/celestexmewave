@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../styles/normalize.css">
   <link rel="stylesheet" href="../styles/styles.css">
   <link rel="stylesheet" href="../styles/mewave-styles.css">
+  <link rel="stylesheet" href="../styles/profile-styles.css">
 </head>
 <body>
   <header class="site-header">
@@ -37,19 +38,94 @@
       <a href="../pages/login.html"><img src="../assets/icons/user.svg" alt="User" class="icon"></a>
     </div>
   </header>
+  <main class="perfil-container">
+    <div class="back">
+      <a href="#"><span>←</span> Ir a las Tiendas</a>
+    </div>
 
-  <main>
-    <h1>¡NEW ARRIVALS!</h1>
+    <div class="cards">
+      <!-- Información del perfil -->
+      <div class="card">
+        <h3>Información del perfil</h3>
+        <form>
+          <label>Nombres y Apellidos *</label>
+          <input type="text" placeholder="Tu nombre completo">
 
-    <section class="banner">
-      <div class="banner-track">
-        <img src="../assets/images/banner1_mw.png" alt="Banner 1">
-        <img src="../assets/images/banner2_mw.png" alt="Banner 2">
-        <img src="../assets/images/banner3_mw.png" alt="Banner 3">
-        <img src="../assets/images/banner4_mw.png" alt="Banner 4">
+          <label>Teléfono *</label>
+          <div class="phone-input">
+            <img src="https://flagcdn.com/w20/co.png" alt="bandera">
+            <input type="tel" placeholder="+57 300 000 0000">
+          </div>
+
+          <label>Email *</label>
+          <input type="email" placeholder="tuemail@email.com">
+
+          <label>Ciudad *</label>
+          <input type="text" placeholder="Tu ciudad">
+
+          <label>Dirección *</label>
+          <input type="text" placeholder="Calle principal">
+          <input type="text" placeholder="Dirección 2">
+
+          <label>Código Postal</label>
+          <input type="text" placeholder="000000">
+
+          <button type="button" class="btn-pink">Actualizar</button>
+
+          <label>Cambiar Contraseña</label>
+          <input type="password" placeholder="Nueva Contraseña">
+          <input type="password" placeholder="Confirmar Contraseña">
+          <button type="button" class="btn-pink">Cambiar contraseña</button>
+        </form>
       </div>
-    </section>
+
+      <!-- Preferencias -->
+      <div class="card">
+        <h3>Preferencias</h3>
+        <form>
+          <label>¿Cuál es tu categoría favorita?</label>
+          <div class="options">
+            <button type="button">Mujer</button>
+            <button type="button">Hombre</button>
+            <button type="button">Tallas Grandes</button>
+          </div>
+
+          <label>¿Para quién compras normalmente?</label>
+          <div class="options">
+            <button type="button">Para mí</button>
+            <button type="button">Para mi Novio/a</button>
+            <button type="button">Para mis Padres</button>
+          </div>
+
+          <label>¿Cuáles son tus estilos favoritos?</label>
+          <div class="options">
+            <button type="button">Básico</button>
+            <button type="button">Casuales</button>
+            <button type="button">Elegante</button>
+            <button type="button">Deportivo</button>
+          </div>
+
+          <label>¿Para qué ocasiones compras ropa más seguido?</label>
+          <div class="options">
+            <button type="button">Trabajo</button>
+            <button type="button">Fiestas</button>
+            <button type="button">Deporte</button>
+            <button type="button">Uso Diario</button>
+          </div>
+
+          <label>¿Qué material prefieres?</label>
+          <div class="options">
+            <button type="button">Algodón</button>
+            <button type="button">Lana</button>
+            <button type="button">Denim</button>
+          </div>
+
+          <button type="button" class="btn-pink">Actualizar</button>
+        </form>
+      </div>
+    </div>
   </main>
+
 
 
   <footer class="site-footer">
@@ -84,8 +160,6 @@
       </div>
     </div>
   </footer>
-
-  <script src="../assets/js/card.js"></script>
   <script src="../assets/js/header.js"></script>
 </body>
 </html>
