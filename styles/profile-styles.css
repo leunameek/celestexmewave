@@ -1,0 +1,105 @@
+.perfil-container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 20px auto;
+  font-family: 'Poppins', sans-serif;
+}
+
+.back a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+}
+
+.cards {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  min-width: 320px;
+}
+
+.card h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+form label {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.phone-input {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.phone-input img {
+  width: 22px;
+  height: 15px;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.options button {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f7f7f7;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.options button:hover {
+  background: #ffd9e6;
+}
+
+.options .disabled {
+  color: #bbb;
+  cursor: not-allowed;
+}
+
+.btn-pink {
+  background-color: #ff4081;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.btn-pink:hover {
+  background-color: #e73873;
+}
+
+@media (max-width: 768px) {
+  .cards {
+    flex-direction: column;
+  }
+}
