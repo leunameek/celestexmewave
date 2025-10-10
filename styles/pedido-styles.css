@@ -1,0 +1,130 @@
+.checkout-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 30px auto;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.back a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+}
+
+.checkout-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.shipping-card,
+.payment-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  background: #fff;
+}
+
+.shipping-card {
+  flex: 2;
+  min-width: 500px;
+}
+
+.payment-card {
+  flex: 1;
+  text-align: center;
+  min-width: 250px;
+}
+
+.shipping-card h3,
+.payment-card h3 {
+  text-align: left;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.shipping-card form label {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.shipping-card form input,
+.shipping-card form textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.map-section {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.map-section p {
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.payment-methods {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.payment-methods img {
+  width: 50px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.payment-methods img:hover {
+  transform: scale(1.1);
+}
+
+.confirm-section {
+  text-align: right;
+  margin-top: 25px;
+}
+
+.btn-confirm {
+  background-color: #ff4081;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-confirm:hover {
+  background-color: #e73873;
+}
+
+@media (max-width: 768px) {
+  .checkout-content {
+    flex-direction: column;
+  }
+
+  .shipping-card,
+  .payment-card {
+    width: 100%;
+  }
+
+  .confirm-section {
+    text-align: center;
+  }
+}
+
+ 
