@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Celeste & Mewave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">            
+  <link rel="stylesheet" href="../styles/normalize.css">
+  <link rel="stylesheet" href="../styles/styles.css">
+  <link rel="stylesheet" href="../styles/mewave-styles.css">
+  <link rel="stylesheet" href="../styles/login-styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo">
+      <img id="celeste-logo" src="../assets/icons/celeste-logo.svg" alt="Celeste Logo">
+      x
+      <img id="mewave-logo" src="../assets/icons/mewave-logo.svg" alt="Mewave Logo">
+    </div>
+
+    <nav class="main-nav">
+      <a href="#">Sobre nosotros</a>
+      <a href="#">Tiendas</a>
+      <a href="#">Promociones</a>
+      <a href="#">¡Nuevo!</a>
+    </nav>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Busca un producto...">
+      <button type="submit"><img src="../assets/icons/search.svg" alt="Search"></button>
+    </div>
+
+    <div class="icons">
+      <a href="#"><img src="../assets/icons/cart.svg" alt="Cart" class="icon"></a>
+      <a href="#"><img src="../assets/icons/user.svg" alt="User" class="icon"></a>
+    </div>
+  </header>
+
+<main class="login-main">
+  <!-- Fondo con figuras decorativas -->
+  <div class="background-shapes">
+    <div class="shape shape-top"></div>
+    <div class="shape shape-bottom"></div>
+  </div>
+
+  <!-- Contenedor principal del login -->
+  <section class="login-container">
+    <div class="login-box">
+      <div class="login-logo">
+        <img src="../assets/icons/celeste-celestexmewave.svg" alt="Celeste Logo" class="celeste-logo">
+      </div>
+
+      <p class="login-subtitle">Entra a tu cuenta</p>
+
+      <form class="login-form">
+        <div class="input-group">
+          <img src="../assets/icons/email_icon.svg" alt="email" class="input-icon">
+          <input type="text" placeholder="Email o Teléfono" required>
+        </div>
+
+        <div class="input-group">
+          <img src="../assets/icons/key_icon.svg" alt="contraseña" class="input-icon">
+          <input type="password" placeholder="Contraseña" required>
+        </div>
+
+        <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+        <button type="submit" class="btn-login">Entrar</button>
+        <a href="#" class="create-account">Crea tu cuenta</a>
+      </form>
+
+      <a href="#" class="go-store">¡Ve a las tiendas!</a>
+    </div>
+  </section>
+</main>
+
+
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-left">
+        <img src="../assets/icons/celestexmewave.svg" alt="Celeste x mewave" class="footer-logo">
+        <p>Una alianza entre madre e hijo y sus tiendas de ropa, vestimos para que tengas estilo.</p>
+      </div>
+
+      <div class="footer-right">
+        <ul class="contacto-celeste">
+          <li><img src="../assets/icons/whatsappicon.svg" alt="Whatsapp"> +57 3113464324</li>
+          <li><img src="../assets/icons/instagramicon.svg" alt="Instagram"> @celestafemenina</li>
+          <li><img src="../assets/icons/facebookicon.svg" alt="Facebook"> Celesta Femenina</li>
+        </ul>
+        <ul class="contacto-mewave">
+          <li><img src="../assets/icons/whatsappicon.svg" alt="Whatsapp"> +57 3103478044</li>
+          <li><img src="../assets/icons/instagramicon.svg" alt="Instagram"> @mewave.co</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr style="margin:0; border:none; border-top:1px solid #ccc;">
+
+    <div class="footer-bottom">
+      <p>celestxmewave.com © 2010 - 2025, todos los derechos reservados</p>
+      <div class="payment-methods">
+        <img id="visa" src="../assets/icons/visa.svg" alt="Visa">
+        <img id="mastercard" src="../assets/icons/mastercard.svg" alt="Mastercard">
+        <img id="applepay" src="../assets/icons/applepay.svg" alt="Apple Pay">
+        <img id="nequi" src="../assets/icons/nequi.svg" alt="Nequi">
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/card.js"></script>
+  <script src="../assets/js/logo.js"></script>
+</body>
+</html>
