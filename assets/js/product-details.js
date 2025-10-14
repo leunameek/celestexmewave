@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
             addToCartBtn.addEventListener('click', () => {
                 const qty = parseInt(quantityInput.textContent);
                 const selectedSize = document.querySelector('.size-option.active')?.textContent || '';
-                const selectedColor = document.querySelector('.color-option.active')?.classList[1] || ''; // e.g., color-green
+                const selectedColor = document.querySelector('.color-option.active')?.classList[1] || '';
 
                 const cartItem = {
                     product: selectedProduct,

@@ -71,7 +71,6 @@ function createProductCard(product) {
 
   card.appendChild(info);
 
-  // Make card clickable
   card.style.cursor = 'pointer';
   card.addEventListener('click', () => {
     localStorage.setItem('selectedProduct', JSON.stringify(product));

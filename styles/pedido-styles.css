@@ -1,8 +1,9 @@
 .checkout-container {
   width: 90%;
   max-width: 1200px;
-  margin: 30px auto;
+  margin: 60px auto;
   font-family: 'Montserrat', sans-serif;
+  padding: 20px 20px;
 }
 
 .back a {
@@ -30,13 +31,13 @@
 
 .shipping-card {
   flex: 2;
-  min-width: 500px;
+  min-width: 300px;
 }
 
 .payment-card {
   flex: 1;
   text-align: center;
-  min-width: 250px;
+  min-width: 200px;
 }
 
 .shipping-card h3,
@@ -81,14 +82,15 @@
   flex-wrap: wrap;
 }
 
-.payment-methods img {
-  width: 50px;
+.payment-methods svg {
+  width: 45px;
   height: auto;
   cursor: pointer;
   transition: transform 0.2s;
+  flex-shrink: 0;
 }
 
-.payment-methods img:hover {
+.payment-methods svg:hover {
   transform: scale(1.1);
 }
 
@@ -113,17 +115,76 @@
 }
 
 @media (max-width: 768px) {
+  .checkout-container {
+    margin: 20px auto;
+    padding: 0 10px;
+  }
+
   .checkout-content {
     flex-direction: column;
+    gap: 20px;
   }
 
   .shipping-card,
   .payment-card {
     width: 100%;
+    padding: 15px;
+  }
+
+  .shipping-card h3,
+  .payment-card h3 {
+    font-size: 18px;
+  }
+
+  .shipping-card form label {
+    font-size: 16px;
+  }
+
+  .shipping-card form input,
+  .shipping-card form textarea {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .payment-methods {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .payment-methods svg {
+    width: 60px;
   }
 
   .confirm-section {
     text-align: center;
+    margin-top: 20px;
+  }
+
+  .btn-confirm {
+    padding: 12px 25px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-container {
+    width: 95%;
+    padding: 0 5px;
+  }
+
+  .shipping-card,
+  .payment-card {
+    padding: 10px;
+  }
+
+  .payment-methods svg {
+    width: 50px;
+  }
+
+  .btn-confirm {
+    width: 100%;
+    padding: 15px;
   }
 }
 

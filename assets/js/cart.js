@@ -83,7 +83,6 @@ function updateOrderSummary() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     let total = 0;
 
-    // Clear existing summary items except total
     const summaryItems = document.querySelectorAll('.summary-item');
     summaryItems.forEach(item => {
         if (!item.classList.contains('summary-total')) {

@@ -10,8 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">            
   <link rel="stylesheet" href="../styles/normalize.css">
   <link rel="stylesheet" href="../styles/styles.css">
+  <link rel="stylesheet" href="../styles/header-styles.css">
   <link rel="stylesheet" href="../styles/mewave-styles.css">
   <link rel="stylesheet" href="../styles/login-styles.css">
+  <link rel="stylesheet" href="../styles/header-styles.css">
 </head>
 <body>
   <header class="site-header">
@@ -22,8 +24,8 @@
     </div>
 
     <nav class="main-nav">
-      <a href="#">Sobre nosotros</a>
-      <a href="#">Tiendas</a>
+      <a href="../pages/about.html">Sobre nosotros</a>
+      <a href="../index.html">Tiendas</a>
       <a href="#">Promociones</a>
       <a href="#">¡Nuevo!</a>
     </nav>
@@ -69,7 +71,7 @@
 
         <p class="login-subtitle">Entra a tu cuenta</p>
 
-        <form class="login-form">
+        <form class="login-form" id="loginForm">
           <div class="input-group">
             <img src="../assets/icons/email_icon.svg" alt="email" class="input-icon">
             <input type="text" placeholder="Email o Teléfono" required>
@@ -121,6 +123,14 @@
       </div>
     </div>
   </footer>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Mock login - in a real app, this would validate credentials
+      localStorage.setItem('isLoggedIn', 'true');
+      window.location.href = 'profile.html';
+    });
+  </script>
   <script src="../assets/js/header.js"></script>
 </body>
 </html>

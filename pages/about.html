@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Celeste & Mewave</title>
+  <title>Sobre Nosotros - Celeste & Mewave</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">            
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="../styles/normalize.css">
   <link rel="stylesheet" href="../styles/styles.css">
   <link rel="stylesheet" href="../styles/header-styles.css">
-  <link rel="stylesheet" href="../styles/mewave-styles.css">
+  <link rel="stylesheet" href="../styles/about-styles.css">
+  <link rel="stylesheet" href="../styles/header-styles.css">
 </head>
 <body>
   <header class="site-header">
@@ -22,7 +24,7 @@
     </div>
 
     <nav class="main-nav">
-      <a href="about.html">Sobre nosotros</a>
+      <a href="#">Sobre nosotros</a>
       <a href="../index.html">Tiendas</a>
       <a href="#">Promociones</a>
       <a href="#">¡Nuevo!</a>
@@ -34,24 +36,23 @@
     </div>
 
     <div class="icons">
-      <a href="../pages/cart.html"><img src="../assets/icons/cart.svg" alt="Cart" class="icon"></a>
-      <a href="../pages/login.html"><img src="../assets/icons/user.svg" alt="User" class="icon"></a>
+      <a href="cart.html"><img src="../assets/icons/cart.svg" alt="Cart" class="icon"></a>
+      <a href="login.html"><img src="../assets/icons/user.svg" alt="User" class="icon"></a>
     </div>
   </header>
 
-  <main>
-    <h1>¡NEW ARRIVALS!</h1>
+  <main class="about-container">
+    <section class="about-banner">
+      <img src="../assets/images/celestes.jpg" alt="Celeste & Mewave Banner">
+    </section>
 
-    <section class="banner">
-      <div class="banner-track">
-        <img src="../assets/images/banner1_mw.png" alt="Banner 1">
-        <img src="../assets/images/banner2_mw.png" alt="Banner 2">
-        <img src="../assets/images/banner3_mw.png" alt="Banner 3">
-        <img src="../assets/images/banner4_mw.png" alt="Banner 4">
-      </div>
+    <section class="about-content">
+      <h2>Sobre Celeste & Mewave</h2>
+      <p>Una alianza entre madre e hijos y sus tiendas de ropa.</p>
+      <h2>Nuestra historia</h2>
+      <p>Una madre trabajadora de la ciudad de Pasto decide emprender en el 2010, en un pequeño local del Centro Comercial Bomboná y enseñó a sus hijos el arte de las ventas y la creación de negocios, así es como hoy en día lograron construir una de las tiendas de ropa que mejor viste a los y las habitantes de Pasto.</p>
     </section>
   </main>
-
 
   <footer class="site-footer">
     <div class="footer-top">
@@ -85,8 +86,6 @@
       </div>
     </div>
   </footer>
-
-  <script src="../assets/js/card.js"></script>
   <script src="../assets/js/header.js"></script>
 </body>
 </html>
