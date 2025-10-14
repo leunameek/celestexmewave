@@ -1,5 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const jsonFile = window.location.pathname.includes('celeste') ? 'celeste.json' : 'mewave.json';
+  const isCeleste = window.location.pathname.includes('celeste');
+  const isMewave = window.location.pathname.includes('mewave');
+  let jsonFile = 'celeste.json'; // default
+
+  if (isCeleste) {
+    jsonFile = 'celeste.json';
+  } else if (isMewave) {
+    jsonFile = 'mewave.json';
+  }
+
   fetch('../assets/products/' + jsonFile)
     .then(response => response.json())
     .then(products => {
