@@ -48,36 +48,40 @@
       <!-- Información del perfil -->
       <div class="card">
         <h3>Información del perfil</h3>
-        <form>
-          <label>Nombres y Apellidos *</label>
-          <input type="text" placeholder="Tu nombre completo">
+        <form id="profile-form">
+          <label>Nombres *</label>
+          <input type="text" id="first-name" placeholder="Tu nombre" required>
+
+          <label>Apellidos *</label>
+          <input type="text" id="last-name" placeholder="Tus apellidos" required>
 
           <label>Teléfono *</label>
           <div class="phone-input">
             <img src="https://flagcdn.com/w20/co.png" alt="bandera">
-            <input type="tel" placeholder="+57 300 000 0000">
+            <span>+57</span>
+            <input type="tel" id="phone" placeholder="300 000 0000">
           </div>
 
           <label>Email *</label>
-          <input type="email" placeholder="tuemail@email.com">
+          <input type="email" id="email" placeholder="tuemail@email.com" disabled>
 
-          <label>Ciudad *</label>
-          <input type="text" placeholder="Tu ciudad">
+          <button type="button" id="update-profile-btn" class="btn-pink">Actualizar</button>
 
-          <label>Dirección *</label>
-          <input type="text" placeholder="Calle principal">
-          <input type="text" placeholder="Dirección 2">
-
-          <label>Código Postal</label>
-          <input type="text" placeholder="000000">
-
-          <button type="button" class="btn-pink">Actualizar</button>
+          <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
 
           <label>Cambiar Contraseña</label>
-          <input type="password" placeholder="Nueva Contraseña">
-          <input type="password" placeholder="Confirmar Contraseña">
-          <button type="button" class="btn-pink">Cambiar contraseña</button>
+          <input type="password" id="current-password" placeholder="Contraseña Actual">
+          <input type="password" id="new-password" placeholder="Nueva Contraseña">
+          <input type="password" id="confirm-password" placeholder="Confirmar Nueva Contraseña">
+          <button type="button" id="change-password-btn" class="btn-pink">Cambiar contraseña</button>
         </form>
+      </div>
+
+      <!-- Delete Account -->
+      <div class="card">
+        <h3>Eliminar Cuenta</h3>
+        <p>Esta acción no se puede deshacer. Se eliminarán todos tus datos permanentemente.</p>
+        <button type="button" id="delete-account-btn" class="btn-danger">Eliminar Cuenta</button>
       </div>
 
       <!-- Preferencias -->
@@ -161,6 +165,8 @@
       </div>
     </div>
   </footer>
+  <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/header.js"></script>
+  <script src="../assets/js/profile.js"></script>
 </body>
 </html>

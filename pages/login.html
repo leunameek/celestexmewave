@@ -74,16 +74,18 @@
         <form class="login-form" id="loginForm">
           <div class="input-group">
             <img src="../assets/icons/email_icon.svg" alt="email" class="input-icon">
-            <input type="text" placeholder="Email o Teléfono" required>
+            <input type="text" id="emailOrPhone" placeholder="Email o Teléfono" required>
           </div>
 
           <div class="input-group">
             <img src="../assets/icons/key_icon.svg" alt="contraseña" class="input-icon">
-            <input type="password" placeholder="Contraseña" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
           </div>
 
+          <div id="errorMessage" class="error-message" style="display: none; color: red; margin-bottom: 10px;"></div>
+
           <a href="recovery.html" class="forgot-password">¿Olvidaste tu contraseña?</a>
-          <button type="submit" class="btn-login">Entrar</button>
+          <button type="submit" class="btn-login" id="loginBtn">Entrar</button>
           <a href="register.html" class="create-account">Crea tu cuenta</a>
         </form>
       </div>
@@ -123,14 +125,47 @@
       </div>
     </div>
   </footer>
+  <script src="../assets/js/api-client.js"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      // Mock login - in a real app, this would validate credentials
-      localStorage.setItem('isLoggedIn', 'true');
-      window.location.href = 'profile.html';
+      
+      const emailOrPhone = document.getElementById('emailOrPhone').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('errorMessage');
+      const loginBtn = document.getElementById('loginBtn');
+      
+      try {
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Entrando...';
+        errorMessage.style.display = 'none';
+
+        // Normalize identifier for login
+        let identifier = emailOrPhone;
+        if (!emailOrPhone.includes('@')) {
+          // It's phone, ensure +57 prefix
+          if (!emailOrPhone.startsWith('+')) {
+            identifier = '+57' + emailOrPhone;
+          }
+        }
+
+        const response = await apiClient.login(identifier, password);
+        
+        if (response.access_token) {
+          // Login successful
+          window.location.href = 'profile.html';
+        } else {
+          throw new Error(response.message || 'Login failed');
+        }
+      } catch (error) {
+        errorMessage.textContent = error.message || 'Error al iniciar sesión. Verifica tus credenciales.';
+        errorMessage.style.display = 'block';
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Entrar';
+      }
     });
   </script>
+  <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/header.js"></script>
 </body>
 </html>

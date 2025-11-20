@@ -1,17 +1,18 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const isCeleste = window.location.pathname.includes('celeste');
   const isMewave = window.location.pathname.includes('mewave');
-  let jsonFile = 'celeste.json'; // default
+  let storeName = 'Celeste'; // default
 
   if (isCeleste) {
-    jsonFile = 'celeste.json';
+    storeName = 'Celeste';
   } else if (isMewave) {
-    jsonFile = 'mewave.json';
+    storeName = 'Mewave';
   }
 
-  fetch('../assets/products/' + jsonFile)
-    .then(response => response.json())
-    .then(products => {
+  apiClient.getAllProducts(storeName)
+    .then(response => {
+      const products = response.products || [];
+      console.log(`Fetched products for ${storeName}:`, products); // Debug log
       const categories = {};
       products.forEach(product => {
         if (!categories[product.category]) {
@@ -51,7 +52,8 @@ function createProductCard(product) {
   card.className = 'producto-card';
 
   const img = document.createElement('img');
-  img.src = product.image;
+  const imageUrl = product.image_url ? (apiClient.baseURL + product.image_url) : product.image;
+  img.src = imageUrl;
   img.alt = product.name;
   card.appendChild(img);
 

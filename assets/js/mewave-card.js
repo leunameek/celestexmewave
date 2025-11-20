@@ -1,7 +1,9 @@
-document.addEventListener('DOMContentLoaded', function() {
-  fetch('../assets/products/mewave.json')
-    .then(response => response.json())
-    .then(products => {
+document.addEventListener('DOMContentLoaded', function () {
+  // Use API Client to fetch products
+  apiClient.getAllProducts('Mewave')
+    .then(response => {
+      const products = response.products || [];
+      console.log('Fetched products for Mewave:', products); // Debug log
       const categories = {};
       products.forEach(product => {
         if (!categories[product.category]) {
@@ -40,7 +42,8 @@ function createProductCard(product) {
   card.className = 'producto-card';
 
   const img = document.createElement('img');
-  img.src = product.image;
+  const imageUrl = product.image_url ? (apiClient.baseURL + product.image_url) : product.image;
+  img.src = imageUrl;
   img.alt = product.name;
   card.appendChild(img);
 

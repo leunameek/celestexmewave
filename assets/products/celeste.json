@@ -1,128 +1,212 @@
 [
   {
     "category": "Blusas",
-    "name": "Blusa Ancha Negra",
-    "description": "Blusa ancha de estilo oversize en color negro, perfecta para un look casual y moderno.",
+    "name": "Blusa Azul",
+    "description": "Blusa azul vibrante, perfecta para un look casual y fresco. Combina bien con cualquier pantalón o falda.",
     "price": 75000,
-    "sizes": ["S", "M", "L", "XL"],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
     "available_units": 20,
-    "image": "../assets/images/Blusa ancha Negra.png"
+    "image": "../assets/images/celeste_images/blusa_azul.jpeg"
   },
   {
     "category": "Blusas",
-    "name": "Blusa Café con Beige",
-    "description": "Blusa en tonos café y beige, ideal para combinar con pantalones o faldas.",
-    "price": 70000,
-    "sizes": ["S", "M", "L", "XL"],
+    "name": "Blusa Blanca Vuelo",
+    "description": "Blusa blanca con efecto vuelo y movimiento, ideal para un estilo elegante y femenino.",
+    "price": 80000,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "available_units": 18,
+    "image": "../assets/images/celeste_images/blusa_blanca_vuelo.jpeg"
+  },
+  {
+    "category": "Blusas",
+    "name": "Blusa Dalmata",
+    "description": "Blusa con estampado dalmata moderno, versátil y atrevida. Perfecta para destacar.",
+    "price": 72000,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
     "available_units": 15,
-    "image": "../assets/images/blusa cafe con beige.png"
+    "image": "../assets/images/celeste_images/blusa_dalmata.jpeg"
   },
   {
     "category": "Blusas",
     "name": "Blusa Negra",
-    "description": "Blusa básica negra elegante, versátil para cualquier ocasión.",
-    "price": 65000,
-    "sizes": ["S", "M", "L", "XL"],
+    "description": "Blusa negra clásica y elegante, básica versátil para cualquier ocasión.",
+    "price": 60000,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
     "available_units": 25,
-    "image": "../assets/images/Blusa Negra.png"
-  },
-  {
-    "category": "Blusas",
-    "name": "Blusa Rosa",
-    "description": "Blusa rosa fresca y femenina, añade un toque de color a tu outfit.",
-    "price": 68000,
-    "sizes": ["S", "M", "L", "XL"],
-    "available_units": 18,
-    "image": "../assets/images/Blusa rosa.png"
+    "image": "../assets/images/celeste_images/blusa_negra.jpeg"
   },
   {
     "category": "Conjuntos",
-    "name": "Conjunto Café Oscuro",
-    "description": "Conjunto en tono café oscuro, cómodo y sofisticado para el día a día.",
-    "price": 120000,
-    "sizes": ["S", "M", "L", "XL"],
-    "available_units": 12,
-    "image": "../assets/images/conjunto cafe oscuro.png"
-  },
-  {
-    "category": "Conjuntos",
-    "name": "Conjunto Café",
-    "description": "Conjunto en color café, perfecto para un estilo casual chic.",
+    "name": "Conjunto Botones Negro",
+    "description": "Conjunto negro con detalles de botones, sofisticado y cómodo para el día a día.",
     "price": 115000,
-    "sizes": ["S", "M", "L", "XL"],
-    "available_units": 14,
-    "image": "../assets/images/conjunto cafe.png"
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "available_units": 12,
+    "image": "../assets/images/celeste_images/conjunto_botones_negro.jpeg"
   },
   {
     "category": "Conjuntos",
-    "name": "Conjunto Verde Esmeralda",
-    "description": "Conjunto vibrante en verde esmeralda, ideal para destacar.",
-    "price": 125000,
-    "sizes": ["S", "M", "L", "XL"],
+    "name": "Conjunto Negro Encaje",
+    "description": "Conjunto negro con detalles de encaje elegante, perfecto para eventos especiales.",
+    "price": 120000,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
     "available_units": 10,
-    "image": "../assets/images/conjunto Verde esmralda.png"
+    "image": "../assets/images/celeste_images/conjunto_negro_encaje.jpeg"
+  },
+  {
+    "category": "Conjuntos",
+    "name": "Conjunto Pana Beige",
+    "description": "Conjunto en tela pana beige, cómodo y cálido para un estilo relajado y moderno.",
+    "price": 110000,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "available_units": 14,
+    "image": "../assets/images/celeste_images/conjunto_pana_beige.jpeg"
   },
   {
     "category": "Conjuntos",
     "name": "Conjunto Verde",
-    "description": "Conjunto en tono verde, fresco y moderno.",
+    "description": "Conjunto en tono verde fresco, ideal para un look casual chic y sofisticado.",
     "price": 118000,
-    "sizes": ["S", "M", "L", "XL"],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
     "available_units": 16,
-    "image": "../assets/images/Conjunto Verde.png"
-  },
-  {
-    "category": "Enterizos",
-    "name": "Enterizo Azul",
-    "description": "Enterizo azul cómodo y elegante, perfecto para ocasiones especiales.",
-    "price": 150000,
-    "sizes": ["S", "M", "L", "XL"],
-    "available_units": 8,
-    "image": "../assets/images/Enterizo Azul.png"
-  },
-  {
-    "category": "Enterizos",
-    "name": "Enterizo Beige",
-    "description": "Enterizo beige neutro, versátil y sofisticado.",
-    "price": 145000,
-    "sizes": ["S", "M", "L", "XL"],
-    "available_units": 11,
-    "image": "../assets/images/Enterizo Beige.png"
-  },
-  {
-    "category": "Enterizos",
-    "name": "Enterizo Blanco",
-    "description": "Enterizo blanco clásico, ideal para looks limpios y frescos.",
-    "price": 140000,
-    "sizes": ["S", "M", "L", "XL"],
-    "available_units": 13,
-    "image": "../assets/images/Enterizo Blanco.png"
-  },
-  {
-    "category": "Enterizos",
-    "name": "Enterizo Negro",
-    "description": "Enterizo negro elegante, perfecto para eventos nocturnos.",
-    "price": 155000,
-    "sizes": ["S", "M", "L", "XL"],
-    "available_units": 9,
-    "image": "../assets/images/EnterizoNegro.png"
+    "image": "../assets/images/celeste_images/conjunto_verde.jpeg"
   },
   {
     "category": "Vestidos",
-    "name": "Vestido Beige con Flores",
-    "description": "Vestido beige con detalles florales, romántico y delicado.",
+    "name": "Vestido Azul",
+    "description": "Vestido azul elegante, perfecto para ocasiones especiales y eventos formales.",
     "price": 95000,
-    "sizes": ["S", "M", "L", "XL"],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
     "available_units": 17,
-    "image": "../assets/images/VestidoBeigeFlores.png"
+    "image": "../assets/images/celeste_images/vestido_azul.jpeg"
   },
   {
     "category": "Vestidos",
-    "name": "Vestido Rojo",
-    "description": "Vestido rojo apasionado, destaca en cualquier evento.",
-    "price": 88000,
-    "sizes": ["S", "M", "L", "XL"],
-    "available_units": 14,
-    "image": "../assets/images/VestidoRojo1.png"
+    "name": "Vestido Azul Lentejuelas",
+    "description": "Vestido azul con detalles de lentejuelas brillantes, ideal para fiestas y eventos nocturnos.",
+    "price": 110000,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "available_units": 9,
+    "image": "../assets/images/celeste_images/vestido_azul_lentejuelas.jpeg"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Blanco",
+    "description": "Vestido blanco clásico y fresco, versátil para cualquier ocasión desde casual hasta formal.",
+    "price": 85000,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "available_units": 22,
+    "image": "../assets/images/celeste_images/vestido_blanco.jpeg"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Blanco Encaje",
+    "description": "Vestido blanco con detalles de encaje delicado, romántico y sofisticado.",
+    "price": 98000,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "available_units": 13,
+    "image": "../assets/images/celeste_images/vestido_blanco_encaje.jpeg"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Negro Encaje Corte Pierna",
+    "description": "Vestido negro con encaje y corte a la pierna, elegante y atrevido para destacar.",
+    "price": 105000,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "available_units": 11,
+    "image": "../assets/images/celeste_images/vestido_negro_encaje_corte_pierna.jpeg"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Rojo Corte Pierna",
+    "description": "Vestido rojo pasional con corte a la pierna, perfecto para eventos donde quieras brillar.",
+    "price": 100000,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "available_units": 8,
+    "image": "../assets/images/celeste_images/vestido_rojo_corte_pierna.jpeg"
+  },
+  {
+    "category": "Vestidos",
+    "name": "Vestido Verde",
+    "description": "Vestido en color verde vibrante, fresco y moderno para un look natural y elegante.",
+    "price": 92000,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "available_units": 19,
+    "image": "../assets/images/celeste_images/vestido_verde.jpeg"
   }
 ]

@@ -1,7 +1,9 @@
-document.addEventListener('DOMContentLoaded', function() {
-  fetch('../assets/products/celeste.json')
-    .then(response => response.json())
-    .then(products => {
+document.addEventListener('DOMContentLoaded', function () {
+  // Use API Client to fetch products
+  apiClient.getAllProducts('Celeste')
+    .then(response => {
+      const products = response.products || [];
+      console.log('Fetched products for Celeste:', products); // Debug log
       const categories = {};
       products.forEach(product => {
         if (!categories[product.category]) {
@@ -40,7 +42,9 @@ function createProductCard(product) {
   card.className = 'producto-card';
 
   const img = document.createElement('img');
-  img.src = product.image;
+  // Fix image URL to include base URL if it comes from API
+  const imageUrl = product.image_url ? (apiClient.baseURL + product.image_url) : product.image;
+  img.src = imageUrl;
   img.alt = product.name;
   card.appendChild(img);
 

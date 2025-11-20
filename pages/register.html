@@ -70,28 +70,31 @@
 
         <p class="login-subtitle">Crea tu cuenta</p>
 
-        <form class="login-form">
+        <form class="login-form" id="registerForm">
           <div class="input-group">
             <img src="../assets/icons/user.svg" alt="nombre" class="input-icon">
-            <input type="text" placeholder="Nombre" required>
+            <input type="text" id="firstName" placeholder="Nombre" required>
           </div>
 
           <div class="input-group">
             <img src="../assets/icons/user.svg" alt="apellido" class="input-icon">
-            <input type="text" placeholder="Apellido" required>
+            <input type="text" id="lastName" placeholder="Apellido" required>
           </div>
 
           <div class="input-group">
             <img src="../assets/icons/email_icon.svg" alt="email" class="input-icon">
-            <input type="text" placeholder="Email o Teléfono" required>
+            <input type="text" id="emailOrPhone" placeholder="Email o Teléfono" required>
           </div>
 
           <div class="input-group">
             <img src="../assets/icons/key_icon.svg" alt="contraseña" class="input-icon">
-            <input type="password" placeholder="Contraseña" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
           </div>
 
-          <button type="submit" class="btn-login">Registrarse</button>
+          <div id="errorMessage" class="error-message" style="display: none; color: red; margin-bottom: 10px;"></div>
+          <div id="successMessage" class="success-message" style="display: none; color: green; margin-bottom: 10px;"></div>
+
+          <button type="submit" class="btn-login" id="registerBtn">Registrarse</button>
           <a href="login.html" class="create-account">Ya tienes cuenta? Entra</a>
         </form>
       </div>
@@ -131,6 +134,58 @@
       </div>
     </div>
   </footer>
+  <script src="../assets/js/api-client.js"></script>
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const emailOrPhone = document.getElementById('emailOrPhone').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('errorMessage');
+      const successMessage = document.getElementById('successMessage');
+      const registerBtn = document.getElementById('registerBtn');
+      
+      try {
+        registerBtn.disabled = true;
+        registerBtn.textContent = 'Registrando...';
+        errorMessage.style.display = 'none';
+        successMessage.style.display = 'none';
+        
+        // Determine if input is email or phone
+        let email = '';
+        let phone = '';
+        
+        if (emailOrPhone.includes('@')) {
+          email = emailOrPhone;
+        } else {
+          phone = emailOrPhone;
+        }
+        
+        const response = await apiClient.register(email, phone, firstName, lastName, password);
+        
+        if (response.access_token) {
+          // Registration successful
+          successMessage.textContent = '¡Registro exitoso! Redirigiendo a tu perfil...';
+          successMessage.style.display = 'block';
+          
+          // Redirect to profile after 2 seconds
+          setTimeout(() => {
+            window.location.href = 'profile.html';
+          }, 2000);
+        } else {
+          throw new Error(response.message || 'Registration failed');
+        }
+      } catch (error) {
+        errorMessage.textContent = error.message || 'Error al registrarse. Por favor intenta de nuevo.';
+        errorMessage.style.display = 'block';
+        registerBtn.disabled = false;
+        registerBtn.textContent = 'Registrarse';
+      }
+    });
+  </script>
+  <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/header.js"></script>
 </body>
 </html>
