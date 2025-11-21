@@ -25,8 +25,8 @@
     <nav class="main-nav">
       <a href="about.html">Sobre nosotros</a>
       <a href="../index.html">Tiendas</a>
-      <a href="#">Promociones</a>
-      <a href="#">¡Nuevo!</a>
+      <a href="promotions.html">Promociones</a>
+      <a href="nuevo.html">¡Nuevo!</a>
     </nav>
 
     <div class="search-bar">
@@ -45,7 +45,6 @@
     </div>
 
     <div class="cards">
-      <!-- Información del perfil -->
       <div class="card">
         <h3>Información del perfil</h3>
         <form id="profile-form">
@@ -77,56 +76,22 @@
         </form>
       </div>
 
-      <!-- Delete Account -->
       <div class="card">
         <h3>Eliminar Cuenta</h3>
         <p>Esta acción no se puede deshacer. Se eliminarán todos tus datos permanentemente.</p>
         <button type="button" id="delete-account-btn" class="btn-danger">Eliminar Cuenta</button>
       </div>
 
-      <!-- Preferencias -->
       <div class="card">
-        <h3>Preferencias</h3>
-        <form>
-          <label>¿Cuál es tu categoría favorita?</label>
-          <div class="options">
-            <button type="button">Mujer</button>
-            <button type="button">Hombre</button>
-            <button type="button">Tallas Grandes</button>
-          </div>
-
-          <label>¿Para quién compras normalmente?</label>
-          <div class="options">
-            <button type="button">Para mí</button>
-            <button type="button">Para mi Novio/a</button>
-            <button type="button">Para mis Padres</button>
-          </div>
-
-          <label>¿Cuáles son tus estilos favoritos?</label>
-          <div class="options">
-            <button type="button">Básico</button>
-            <button type="button">Casuales</button>
-            <button type="button">Elegante</button>
-            <button type="button">Deportivo</button>
-          </div>
-
-          <label>¿Para qué ocasiones compras ropa más seguido?</label>
-          <div class="options">
-            <button type="button">Trabajo</button>
-            <button type="button">Fiestas</button>
-            <button type="button">Deporte</button>
-            <button type="button">Uso Diario</button>
-          </div>
-
-          <label>¿Qué material prefieres?</label>
-          <div class="options">
-            <button type="button">Algodón</button>
-            <button type="button">Lana</button>
-            <button type="button">Denim</button>
-          </div>
-
-          <button type="button" class="btn-pink">Actualizar</button>
-        </form>
+        <h3>Mis Pedidos</h3>
+        <div id="orders-container">
+          <div class="loading-orders">Cargando pedidos...</div>
+        </div>
+        <div id="orders-pagination" class="pagination" style="display: none;">
+          <button id="prev-page" class="btn-secondary">Anterior</button>
+          <span id="page-info">Página 1</span>
+          <button id="next-page" class="btn-secondary">Siguiente</button>
+        </div>
       </div>
     </div>
   </main>

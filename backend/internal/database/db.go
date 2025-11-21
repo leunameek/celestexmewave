@@ -14,16 +14,16 @@ import (
 
 var DB *gorm.DB
 
-// Initialize initializes the database connection with Supabase PostgreSQL
+// Initialize monta la conexion con Postgres en Supabase, todo fresh
 func Initialize(cfg *config.Config) error {
 	dsn := cfg.GetDSN()
 
-	// Validate DSN is configured
+	// Validamos que si venga el DSN
 	if dsn == "" {
 		return fmt.Errorf("database configuration error: DATABASE_URL environment variable is required for Supabase connection")
 	}
 
-	// Configure GORM with connection pool settings optimized for Supabase Session Pooler
+	// Configuramos GORM con el pool ideal pa Supabase Session Pooler
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
@@ -31,18 +31,17 @@ func Initialize(cfg *config.Config) error {
 		return fmt.Errorf("failed to connect to Supabase database: %w", err)
 	}
 
-	// Get underlying SQL database to configure connection pool
+	// Agarramos la SQL DB para tunear el pool
 	sqlDB, err := db.DB()
 	if err != nil {
 		return fmt.Errorf("failed to get database instance: %w", err)
 	}
 
-	// Configure connection pool for Session Pooler
-	// Session Pooler: Best for web applications with many concurrent connections
-	// - Max open connections: 25 (Supabase Session Pooler default)
-	// - Max idle connections: 5
-	// - Connection max lifetime: 30 minutes
-	// - Connection max idle time: 5 minutes
+	// Pool para Session Pooler:
+	// - Max open: 25
+	// - Max idle: 5
+	// - Lifetime: 30 mins
+	// - Idle time: 5 mins
 	sqlDB.SetMaxOpenConns(25)
 	sqlDB.SetMaxIdleConns(5)
 	sqlDB.SetConnMaxLifetime(30 * time.Minute)
@@ -51,7 +50,7 @@ func Initialize(cfg *config.Config) error {
 	DB = db
 	log.Println("✓ Connected to PostgreSQL database (Session Pooler mode)")
 
-	// Run migrations
+	// Corremos migraciones
 	if err := Migrate(); err != nil {
 		return fmt.Errorf("failed to run migrations: %w", err)
 	}
@@ -59,7 +58,7 @@ func Initialize(cfg *config.Config) error {
 	return nil
 }
 
-// Migrate runs all database migrations
+// Migrate corre todas las migras
 func Migrate() error {
 	return DB.AutoMigrate(
 		&models.Store{},
@@ -73,12 +72,12 @@ func Migrate() error {
 	)
 }
 
-// GetDB returns the database instance
+// GetDB devuelve la instancia
 func GetDB() *gorm.DB {
 	return DB
 }
 
-// Close closes the database connection
+// Close cierra la conexion
 func Close() error {
 	sqlDB, err := DB.DB()
 	if err != nil {

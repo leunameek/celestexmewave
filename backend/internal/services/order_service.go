@@ -5,13 +5,24 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/leunameek/celestexmewave/internal/database"
-	"github.com/leunameek/celestexmewave/internal/utils"
 	"github.com/leunameek/celestexmewave/models"
 )
 
-// CreateOrderFromCart creates an order from cart items
-func CreateOrderFromCart(cartID uuid.UUID, userID *uuid.UUID, sessionID *string, email string) (*models.Order, error) {
-	// Get cart items
+// ShippingInfo es la info de envio sin misterio
+type ShippingInfo struct {
+	Name       string
+	Phone      string
+	Email      string
+	City       string
+	Address    string
+	Address2   string
+	PostalCode string
+	Notes      string
+}
+
+// CreateOrderFromCart arma el pedido con lo que haya en el carrito
+func CreateOrderFromCart(cartID uuid.UUID, userID *uuid.UUID, sessionID *string, shipping ShippingInfo) (*models.Order, error) {
+	// Sacamos los items del carro
 	cartItems, err := GetCartItems(cartID)
 	if err != nil {
 		return nil, err
@@ -21,27 +32,35 @@ func CreateOrderFromCart(cartID uuid.UUID, userID *uuid.UUID, sessionID *string,
 		return nil, fmt.Errorf("cart is empty")
 	}
 
-	// Calculate total
+	// Calculamos total
 	total := 0.0
 	for _, item := range cartItems {
 		total += item.Product.Price * float64(item.Quantity)
 	}
 
-	// Create order
+	// Creamos el pedido
 	order := &models.Order{
-		ID:            uuid.New(),
-		UserID:        userID,
-		SessionID:     sessionID,
-		TotalAmount:   total,
-		Status:        "pending",
-		PaymentStatus: "pending",
+		ID:                 uuid.New(),
+		UserID:             userID,
+		SessionID:          sessionID,
+		TotalAmount:        total,
+		Status:             "pending",
+		PaymentStatus:      "pending",
+		ShippingName:       shipping.Name,
+		ShippingPhone:      shipping.Phone,
+		ShippingEmail:      shipping.Email,
+		ShippingCity:       shipping.City,
+		ShippingAddress:    shipping.Address,
+		ShippingAddress2:   shipping.Address2,
+		ShippingPostalCode: shipping.PostalCode,
+		ShippingNotes:      shipping.Notes,
 	}
 
 	if err := database.DB.Create(order).Error; err != nil {
 		return nil, fmt.Errorf("failed to create order: %w", err)
 	}
 
-	// Create order items
+	// Creamos los items del pedido
 	for _, cartItem := range cartItems {
 		orderItem := &models.OrderItem{
 			ID:        uuid.New(),
@@ -57,29 +76,15 @@ func CreateOrderFromCart(cartID uuid.UUID, userID *uuid.UUID, sessionID *string,
 		}
 	}
 
-	// Clear cart
+	// Limpiamos el carrito
 	if err := ClearCart(cartID); err != nil {
 		return nil, err
-	}
-
-	// Send confirmation email
-	if email != "" {
-		var items []map[string]interface{}
-		for _, item := range cartItems {
-			items = append(items, map[string]interface{}{
-				"product_name": item.Product.Name,
-				"quantity":     item.Quantity,
-				"size":         item.Size,
-				"unit_price":   item.Product.Price,
-			})
-		}
-		_ = utils.SendOrderConfirmationEmail(email, order.ID.String(), total, items)
 	}
 
 	return order, nil
 }
 
-// GetOrder retrieves an order by ID
+// GetOrder trae pedido por id
 func GetOrder(orderID uuid.UUID) (*models.Order, error) {
 	var order models.Order
 	if err := database.DB.
@@ -91,7 +96,7 @@ func GetOrder(orderID uuid.UUID) (*models.Order, error) {
 	return &order, nil
 }
 
-// GetOrdersByUser retrieves all orders for a user
+// GetOrdersByUser trae pedidos de un user
 func GetOrdersByUser(userID uuid.UUID, page, limit int) ([]models.Order, int64, error) {
 	var orders []models.Order
 	var total int64
@@ -105,12 +110,12 @@ func GetOrdersByUser(userID uuid.UUID, page, limit int) ([]models.Order, int64, 
 
 	offset := (page - 1) * limit
 
-	// Get total count
+	// Conteo total
 	if err := database.DB.Where("user_id = ?", userID).Model(&models.Order{}).Count(&total).Error; err != nil {
 		return nil, 0, fmt.Errorf("failed to count orders: %w", err)
 	}
 
-	// Get paginated orders
+	// Pedidos paginados
 	if err := database.DB.
 		Where("user_id = ?", userID).
 		Preload("OrderItems").
@@ -125,7 +130,7 @@ func GetOrdersByUser(userID uuid.UUID, page, limit int) ([]models.Order, int64, 
 	return orders, total, nil
 }
 
-// GetOrdersBySession retrieves all orders for a session
+// GetOrdersBySession trae pedidos por session
 func GetOrdersBySession(sessionID string, page, limit int) ([]models.Order, int64, error) {
 	var orders []models.Order
 	var total int64
@@ -139,12 +144,12 @@ func GetOrdersBySession(sessionID string, page, limit int) ([]models.Order, int6
 
 	offset := (page - 1) * limit
 
-	// Get total count
+	// Conteo total
 	if err := database.DB.Where("session_id = ?", sessionID).Model(&models.Order{}).Count(&total).Error; err != nil {
 		return nil, 0, fmt.Errorf("failed to count orders: %w", err)
 	}
 
-	// Get paginated orders
+	// Pedidos paginados
 	if err := database.DB.
 		Where("session_id = ?", sessionID).
 		Preload("OrderItems").
@@ -159,7 +164,7 @@ func GetOrdersBySession(sessionID string, page, limit int) ([]models.Order, int6
 	return orders, total, nil
 }
 
-// UpdateOrderStatus updates the status of an order
+// UpdateOrderStatus cambia el status del pedido
 func UpdateOrderStatus(orderID uuid.UUID, status string) (*models.Order, error) {
 	var order models.Order
 	if err := database.DB.First(&order, "id = ?", orderID).Error; err != nil {
@@ -173,7 +178,7 @@ func UpdateOrderStatus(orderID uuid.UUID, status string) (*models.Order, error) 
 	return &order, nil
 }
 
-// UpdatePaymentStatus updates the payment status of an order
+// UpdatePaymentStatus cambia el estado del pago
 func UpdatePaymentStatus(orderID uuid.UUID, paymentStatus string) (*models.Order, error) {
 	var order models.Order
 	if err := database.DB.First(&order, "id = ?", orderID).Error; err != nil {

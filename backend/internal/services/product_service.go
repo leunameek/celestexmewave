@@ -10,7 +10,7 @@ import (
 	"github.com/leunameek/celestexmewave/models"
 )
 
-// ProductJSON represents a product from JSON
+// ProductJSON es la forma del producto en el JSON
 type ProductJSON struct {
 	Category       string   `json:"category"`
 	Name           string   `json:"name"`
@@ -21,9 +21,9 @@ type ProductJSON struct {
 	Image          string   `json:"image"`
 }
 
-// LoadProductsFromJSON loads products from JSON files
+// LoadProductsFromJSON carga productos desde un archivo JSON, todo casero
 func LoadProductsFromJSON(storeID uuid.UUID, storeName, jsonPath string) error {
-	// Read JSON file
+	// Leemos el archivo JSON
 	data, err := ioutil.ReadFile(jsonPath)
 	if err != nil {
 		return fmt.Errorf("failed to read JSON file: %w", err)
@@ -34,16 +34,16 @@ func LoadProductsFromJSON(storeID uuid.UUID, storeName, jsonPath string) error {
 		return fmt.Errorf("failed to parse JSON: %w", err)
 	}
 
-	// Insert or Update products
+	// Insertamos o actualizamos productos
 	for _, p := range products {
 		sizesJSON, _ := json.Marshal(p.Sizes)
 		
-		// Check if product exists
+		// Revisamos si el producto ya existe
 		var existingProduct models.Product
 		err := database.DB.Where("store_id = ? AND name = ?", storeID, p.Name).First(&existingProduct).Error
 
 		if err == nil {
-			// Update existing product
+			// Si existe, lo actualizamos
 			existingProduct.Description = p.Description
 			existingProduct.Price = p.Price
 			existingProduct.AvailableUnits = p.AvailableUnits
@@ -54,7 +54,7 @@ func LoadProductsFromJSON(storeID uuid.UUID, storeName, jsonPath string) error {
 				fmt.Printf("Failed to update product %s: %v\n", p.Name, err)
 			}
 		} else {
-			// Create new product
+			// Producto nuevo
 			product := &models.Product{
 				ID:             uuid.New(),
 				StoreID:        storeID,
@@ -76,7 +76,7 @@ func LoadProductsFromJSON(storeID uuid.UUID, storeName, jsonPath string) error {
 	return nil
 }
 
-// GetAllProducts retrieves all products with optional filtering
+// GetAllProducts trae productos con filtros opcionales
 func GetAllProducts(store, category string, minPrice, maxPrice float64, page, limit int) ([]models.Product, int64, error) {
 	var products []models.Product
 	var total int64
@@ -91,7 +91,7 @@ func GetAllProducts(store, category string, minPrice, maxPrice float64, page, li
 	offset := (page - 1) * limit
 	query := database.DB
 
-	// Apply filters
+	// Filtros opcionales
 	if store != "" {
 		query = query.Joins("JOIN stores ON products.store_id = stores.id").
 			Where("stores.name = ?", store)
@@ -109,12 +109,12 @@ func GetAllProducts(store, category string, minPrice, maxPrice float64, page, li
 		query = query.Where("price <= ?", maxPrice)
 	}
 
-	// Get total count
+	// Total de productos
 	if err := query.Model(&models.Product{}).Count(&total).Error; err != nil {
 		return nil, 0, fmt.Errorf("failed to count products: %w", err)
 	}
 
-	// Get paginated products
+	// Productos paginados
 	if err := query.
 		Preload("Store").
 		Offset(offset).
@@ -126,7 +126,7 @@ func GetAllProducts(store, category string, minPrice, maxPrice float64, page, li
 	return products, total, nil
 }
 
-// GetProductByID retrieves a product by ID
+// GetProductByID trae producto por ID
 func GetProductByID(productID uuid.UUID) (*models.Product, error) {
 	var product models.Product
 	if err := database.DB.Preload("Store").First(&product, "id = ?", productID).Error; err != nil {
@@ -135,7 +135,7 @@ func GetProductByID(productID uuid.UUID) (*models.Product, error) {
 	return &product, nil
 }
 
-// GetProductsByStore retrieves products from a specific store
+// GetProductsByStore trae productos por tienda
 func GetProductsByStore(storeID uuid.UUID, page, limit int) ([]models.Product, int64, error) {
 	var products []models.Product
 	var total int64
@@ -149,12 +149,12 @@ func GetProductsByStore(storeID uuid.UUID, page, limit int) ([]models.Product, i
 
 	offset := (page - 1) * limit
 
-	// Get total count
+	// Total de productos
 	if err := database.DB.Where("store_id = ?", storeID).Model(&models.Product{}).Count(&total).Error; err != nil {
 		return nil, 0, fmt.Errorf("failed to count products: %w", err)
 	}
 
-	// Get paginated products
+	// Productos paginados
 	if err := database.DB.
 		Where("store_id = ?", storeID).
 		Preload("Store").
@@ -167,7 +167,7 @@ func GetProductsByStore(storeID uuid.UUID, page, limit int) ([]models.Product, i
 	return products, total, nil
 }
 
-// GetProductsByCategory retrieves products by category
+// GetProductsByCategory trae productos por categoria
 func GetProductsByCategory(category string, page, limit int) ([]models.Product, int64, error) {
 	var products []models.Product
 	var total int64
@@ -181,12 +181,12 @@ func GetProductsByCategory(category string, page, limit int) ([]models.Product, 
 
 	offset := (page - 1) * limit
 
-	// Get total count
+	// Total de productos
 	if err := database.DB.Where("category = ?", category).Model(&models.Product{}).Count(&total).Error; err != nil {
 		return nil, 0, fmt.Errorf("failed to count products: %w", err)
 	}
 
-	// Get paginated products
+	// Productos paginados
 	if err := database.DB.
 		Where("category = ?", category).
 		Preload("Store").

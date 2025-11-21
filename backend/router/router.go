@@ -6,23 +6,18 @@ import (
 	"github.com/leunameek/celestexmewave/internal/middleware"
 )
 
-// SetupRouter sets up all routes
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
 
-	// Apply global middleware
 	router.Use(middleware.CORSMiddleware())
 	router.Use(middleware.ErrorHandlingMiddleware())
 
-	// Health check
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "ok"})
 	})
 
-	// API routes
 	api := router.Group("/api")
 	{
-		// Auth routes (no auth required)
 		auth := api.Group("/auth")
 		{
 			auth.POST("/register", handlers.Register)
@@ -33,7 +28,6 @@ func SetupRouter() *gin.Engine {
 			auth.POST("/verify-reset-code", handlers.VerifyResetCode)
 		}
 
-		// User routes (auth required)
 		users := api.Group("/users")
 		users.Use(middleware.AuthMiddleware())
 		{
@@ -43,7 +37,6 @@ func SetupRouter() *gin.Engine {
 			users.DELETE("/profile", handlers.DeleteProfile)
 		}
 
-		// Product routes (no auth required)
 		products := api.Group("/products")
 		{
 			products.GET("", handlers.GetAllProducts)
@@ -53,7 +46,6 @@ func SetupRouter() *gin.Engine {
 			products.GET("/images/*filename", handlers.ServeImage)
 		}
 
-		// Cart routes (optional auth)
 		cart := api.Group("/cart")
 		cart.Use(middleware.OptionalAuthMiddleware())
 		{
@@ -64,7 +56,6 @@ func SetupRouter() *gin.Engine {
 			cart.DELETE("", handlers.ClearCart)
 		}
 
-		// Order routes (optional auth)
 		orders := api.Group("/orders")
 		orders.Use(middleware.OptionalAuthMiddleware())
 		{

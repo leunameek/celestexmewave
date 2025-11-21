@@ -13,11 +13,9 @@ type Store struct {
 	Description string    `gorm:"type:text" json:"description"`
 	CreatedAt   time.Time `json:"created_at"`
 
-	// Relationships
 	Products []Product `gorm:"foreignKey:StoreID" json:"-"`
 }
 
-// BeforeCreate hook to generate UUID
 func (s *Store) BeforeCreate(tx *gorm.DB) error {
 	if s.ID == uuid.Nil {
 		s.ID = uuid.New()

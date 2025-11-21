@@ -1,8 +1,13 @@
 document.addEventListener('DOMContentLoaded', async function() {
     const celesteLogo = document.getElementById('celeste-logo');
     const mewaveLogo = document.getElementById('mewave-logo');
+    const cartLink = document.querySelector('.icons a[href*="cart.html"]');
+    if (cartLink) {
+        cartLink.classList.add('cart-link');
+    }
+
     
-    // Find user icon - look for any link with user.svg
+    // Buscamos el icono del user, el del monito
     const userIconLink = document.querySelector('.icons a[href*="login.html"], .icons a[href*="profile.html"]');
     const userIcon = userIconLink ? userIconLink.querySelector('img') : null;
     const basePath = window.location.pathname.includes('/pages/') ? '' : 'pages/';
@@ -22,14 +27,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     if (userIcon && userIconLink) {
-        // Function to check authentication status
+        // Chequeo rapido pa ver si esta logueado
         function checkAuthStatus() {
             const isAuth = typeof apiClient !== 'undefined' && apiClient.isAuthenticated();
             console.log('Auth check:', isAuth, 'apiClient exists:', typeof apiClient !== 'undefined');
             return isAuth;
         }
 
-        // Function to create dropdown content based on auth status
+        // Armamos el dropdown segun si esta o no logueado
         function createDropdownContent() {
             const isLoggedIn = checkAuthStatus();
             if (isLoggedIn) {
@@ -60,15 +65,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             e.preventDefault();
             e.stopPropagation();
             
-            // Refresh dropdown content on each click to check current auth status
+            // Refrescamos el contenido cada click, pa no quedar desactualizados
             const newContent = createDropdownContent();
             console.log('Dropdown content:', newContent);
             dropdown.innerHTML = newContent;
             
-            // Toggle dropdown visibility
+            // Mostrar u ocultar el menu a lo basico
             dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
             
-            // Attach event listeners to dropdown links
+            // Pegamos listeners a los links del menu
             const dropdownLinks = dropdown.querySelectorAll('a');
             dropdownLinks.forEach(link => {
                 link.addEventListener('click', async (e) => {
@@ -84,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         }
                         window.location.href = basePath + 'login.html';
                     } else {
-                        // For other links, close dropdown and allow navigation
+                        // Para los demas links, cerramos y dejamos ir
                         dropdown.style.display = 'none';
                     }
                 });
@@ -96,5 +101,73 @@ document.addEventListener('DOMContentLoaded', async function() {
                 dropdown.style.display = 'none';
             }
         });
+    }
+
+    // Badge del carrito, pa ver cuantas cositas hay
+    let cartBadge;
+    function ensureCartBadge() {
+        if (!cartLink) return;
+        cartBadge = cartLink.querySelector('.cart-count');
+        if (!cartBadge) {
+            cartBadge = document.createElement('span');
+            cartBadge.className = 'cart-count';
+            cartLink.appendChild(cartBadge);
+        }
+    }
+
+    function setCartCount(count) {
+        if (!cartLink) return;
+        ensureCartBadge();
+        if (count > 0) {
+            cartBadge.textContent = count;
+            cartBadge.classList.add('show');
+        } else {
+            cartBadge.textContent = '';
+            cartBadge.classList.remove('show');
+        }
+    }
+
+    async function refreshCartCount() {
+        if (typeof apiClient === 'undefined') return;
+        try {
+            const cart = await apiClient.getCart();
+            const count = (cart.items || []).reduce((sum, item) => sum + item.quantity, 0);
+            setCartCount(count);
+        } catch (err) {
+            console.error('Cart count error:', err);
+        }
+    }
+
+    window.refreshCartCount = refreshCartCount;
+    window.setCartCount = setCartCount;
+
+    await refreshCartCount();
+
+    // Busqueda global, sin complicarse
+    const searchBar = document.querySelector('.search-bar');
+    if (searchBar) {
+        const searchInput = searchBar.querySelector('input');
+        const searchButton = searchBar.querySelector('button');
+        const basePath = window.location.pathname.includes('/pages/') ? '' : 'pages/';
+
+        const executeSearch = () => {
+            const query = searchInput.value.trim();
+            if (!query) return;
+            window.location.href = `${basePath}search.html?q=${encodeURIComponent(query)}`;
+        };
+
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                executeSearch();
+            }
+        });
+
+        if (searchButton) {
+            searchButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                executeSearch();
+            });
+        }
     }
 });

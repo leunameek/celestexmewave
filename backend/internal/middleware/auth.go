@@ -8,7 +8,7 @@ import (
 	"github.com/leunameek/celestexmewave/internal/utils"
 )
 
-// AuthMiddleware validates JWT token
+// AuthMiddleware revisa el JWT, todo bien o pa fuera
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
@@ -33,7 +33,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Store claims in context
+		// Guardamos los claims en el contexto pa usarlos mas tarde
 		c.Set("user_id", claims.UserID.String())
 		c.Set("email", claims.Email)
 		c.Set("first_name", claims.FirstName)
@@ -43,7 +43,7 @@ func AuthMiddleware() gin.HandlerFunc {
 	}
 }
 
-// OptionalAuthMiddleware validates JWT token if present
+// OptionalAuthMiddleware revisa el JWT solo si viene, sin molestar
 func OptionalAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
@@ -65,7 +65,7 @@ func OptionalAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Store claims in context
+		// Guardamos claims si el token sirve
 		c.Set("user_id", claims.UserID.String())
 		c.Set("email", claims.Email)
 		c.Set("first_name", claims.FirstName)

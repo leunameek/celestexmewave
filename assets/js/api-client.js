@@ -1,7 +1,4 @@
-/**
- * API Client for CelestexMewave Frontend
- * Handles all communication with the backend API
- */
+// Todo lo serio de las peticiones pasa por aki, sin tanto protocolo
 
 class APIClient {
   constructor(baseURL = 'http://localhost:8080') {
@@ -10,16 +7,12 @@ class APIClient {
     this.refreshToken = localStorage.getItem('refreshToken');
   }
 
-  /**
-   * Set the base URL for API calls
-   */
+  // Cambio rapdio de base URL cuando toque
   setBaseURL(url) {
     this.baseURL = url;
   }
 
-  /**
-   * Get authorization headers
-   */
+  // Armamos headers y metemos el auth si toca, sin lio
   getHeaders(includeAuth = true) {
     const headers = {
       'Content-Type': 'application/json',
@@ -32,9 +25,7 @@ class APIClient {
     return headers;
   }
 
-  /**
-   * Make a fetch request
-   */
+  // Wrapper de fetch pa no repetir codigoxd
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
     const config = {
@@ -48,11 +39,11 @@ class APIClient {
     try {
       const response = await fetch(url, config);
 
-      // Handle 401 Unauthorized - try to refresh token
+      // Si nos botan con 401, probamos refrescar token tranqui
       if (response.status === 401 && this.refreshToken) {
         const refreshed = await this.refreshAccessToken();
         if (refreshed) {
-          // Retry the original request with new token
+          // Reintentamos la solicitud con token nuevo, suave
           config.headers['Authorization'] = `Bearer ${this.accessToken}`;
           return fetch(url, config);
         }
@@ -60,7 +51,8 @@ class APIClient {
 
       if (!response.ok) {
         const error = await response.json().catch(() => ({}));
-        throw new Error(error.message || `HTTP ${response.status}`);
+        const message = error.error || error.message || `HTTP ${response.status}`;
+        throw new Error(message);
       }
 
       return response;
@@ -70,9 +62,7 @@ class APIClient {
     }
   }
 
-  /**
-   * GET request
-   */
+  // GETcito chill
   async get(endpoint, options = {}) {
     const response = await this.request(endpoint, {
       ...options,
@@ -81,9 +71,7 @@ class APIClient {
     return response.json();
   }
 
-  /**
-   * POST request
-   */
+  // POST relajado
   async post(endpoint, data = {}, options = {}) {
     const response = await this.request(endpoint, {
       ...options,
@@ -93,9 +81,7 @@ class APIClient {
     return response.json();
   }
 
-  /**
-   * PUT request
-   */
+  // PUT pa mandar updates
   async put(endpoint, data = {}, options = {}) {
     const response = await this.request(endpoint, {
       ...options,
@@ -105,9 +91,7 @@ class APIClient {
     return response.json();
   }
 
-  /**
-   * DELETE request
-   */
+  // DELETE para borrar cositas
   async delete(endpoint, options = {}) {
     const response = await this.request(endpoint, {
       ...options,
@@ -116,13 +100,8 @@ class APIClient {
     return response.json();
   }
 
-  /**
-   * AUTHENTICATION ENDPOINTS
-   */
-
-  /**
-   * Register a new user
-   */
+  // ENDPOINTS DE AUTH
+  // Registro chill
   async register(email, phone, firstName, lastName, password) {
     const data = await this.post('/api/auth/register', {
       email,
@@ -139,9 +118,7 @@ class APIClient {
     return data;
   }
 
-  /**
-   * Login user
-   */
+  // Login basico
   async login(emailOrPhone, password) {
     const data = await this.post('/api/auth/login', {
       email: emailOrPhone,
@@ -155,9 +132,7 @@ class APIClient {
     return data;
   }
 
-  /**
-   * Refresh access token
-   */
+  // Refresh de token cuando se vence
   async refreshAccessToken() {
     try {
       const data = await this.post('/api/auth/refresh-token', {
@@ -177,9 +152,7 @@ class APIClient {
     }
   }
 
-  /**
-   * Logout user
-   */
+  // Logout y limpiamos todo
   async logout() {
     try {
       await this.post('/api/auth/logout', {}, { includeAuth: true });
@@ -190,40 +163,35 @@ class APIClient {
     this.clearTokens();
   }
 
-  /**
-   * Request password reset
-   */
+  // Pedir codigo para reset de clave
   async requestPasswordReset(emailOrPhone) {
-    return this.post('/api/auth/request-password-reset', {
-      email_or_phone: emailOrPhone,
-    }, { includeAuth: false });
+    const payload = emailOrPhone.includes('@')
+      ? { email: emailOrPhone }
+      : { phone: emailOrPhone };
+
+    return this.post('/api/auth/request-password-reset', payload, { includeAuth: false });
   }
 
-  /**
-   * Verify reset code and update password
-   */
+  // Verificar codigo y guardar clave nueva
   async verifyResetCode(emailOrPhone, resetCode, newPassword) {
+    const payload = emailOrPhone.includes('@')
+      ? { email: emailOrPhone }
+      : { phone: emailOrPhone };
+
     return this.post('/api/auth/verify-reset-code', {
-      email_or_phone: emailOrPhone,
+      ...payload,
       reset_code: resetCode,
       new_password: newPassword,
     }, { includeAuth: false });
   }
 
-  /**
-   * USER ENDPOINTS
-   */
-
-  /**
-   * Get user profile
-   */
+  // ENDPOINTS DE USUARIO
+  // Perfil del usuario
   async getUserProfile() {
     return this.get('/api/users/profile');
   }
 
-  /**
-   * Update user profile
-   */
+  // Actualizar perfil
   async updateUserProfile(firstName, lastName, phone) {
     return this.put('/api/users/profile', {
       first_name: firstName,
@@ -232,27 +200,18 @@ class APIClient {
     });
   }
 
-  /**
-   * Get user orders
-   */
+  // Pedidos del usuario
   async getUserOrders(page = 1, limit = 10) {
     return this.get(`/api/users/orders?page=${page}&limit=${limit}`);
   }
 
-  /**
-   * Delete user profile
-   */
+  // Borrar cuenta
   async deleteUserProfile() {
     return this.delete('/api/users/profile');
   }
 
-  /**
-   * PRODUCT ENDPOINTS
-   */
-
-  /**
-   * Get all products
-   */
+  // ENDPOINTS DE PRODUCTO
+  // Traer productos segun filtros
   async getAllProducts(store = '', category = '', minPrice = 0, maxPrice = 999999, page = 1, limit = 20) {
     const params = new URLSearchParams({
       store,
@@ -265,41 +224,28 @@ class APIClient {
     return this.get(`/api/products?${params.toString()}`);
   }
 
-  /**
-   * Get product by ID
-   */
+  // Un producto puntual
   async getProductByID(productID) {
     return this.get(`/api/products/${productID}`);
   }
 
-  /**
-   * Get products by store
-   */
+  // Productos de una tienda
   async getProductsByStore(storeID, page = 1, limit = 20) {
     return this.get(`/api/products/store/${storeID}?page=${page}&limit=${limit}`);
   }
 
-  /**
-   * Get products by category
-   */
+  // Productos por categoria
   async getProductsByCategory(category, page = 1, limit = 20) {
     return this.get(`/api/products/category/${category}?page=${page}&limit=${limit}`);
   }
 
-  /**
-   * CART ENDPOINTS
-   */
-
-  /**
-   * Get cart
-   */
+  // ENDPOINTS DEL CARRITO
+  // Ver carrito
   async getCart() {
     return this.get('/api/cart');
   }
 
-  /**
-   * Add item to cart
-   */
+  // Agregar item al carrito
   async addItemToCart(productID, quantity, size = '') {
     return this.post('/api/cart/items', {
       product_id: productID,
@@ -308,9 +254,7 @@ class APIClient {
     });
   }
 
-  /**
-   * Update cart item
-   */
+  // Actualizar item del carrito
   async updateCartItem(itemID, quantity, size = '') {
     return this.put(`/api/cart/items/${itemID}`, {
       quantity,
@@ -318,73 +262,60 @@ class APIClient {
     });
   }
 
-  /**
-   * Remove item from cart
-   */
+  // Quitar item del carrito
   async removeItemFromCart(itemID) {
     return this.delete(`/api/cart/items/${itemID}`);
   }
 
-  /**
-   * Clear cart
-   */
+  // Vaciar carrito
   async clearCart() {
     return this.delete('/api/cart');
   }
 
-  /**
-   * ORDER ENDPOINTS
-   */
-
-  /**
-   * Create order
-   */
-  async createOrder(items, shippingAddress, billingAddress) {
+  // ENDPOINTS DE PEDIDOS
+  // Crear pedido
+  async createOrder(sessionId, shippingInfo) {
     return this.post('/api/orders', {
-      items,
-      shipping_address: shippingAddress,
-      billing_address: billingAddress,
+      session_id: sessionId,
+      shipping_name: shippingInfo.name,
+      shipping_phone: shippingInfo.phone,
+      shipping_email: shippingInfo.email,
+      shipping_city: shippingInfo.city,
+      shipping_address: shippingInfo.address,
+      shipping_address2: shippingInfo.address2,
+      shipping_postal_code: shippingInfo.postalCode,
+      shipping_notes: shippingInfo.notes,
     });
   }
 
-  /**
-   * Get order by ID
-   */
+  // Pedido por id
   async getOrder(orderID) {
     return this.get(`/api/orders/${orderID}`);
   }
 
-  /**
-   * Get orders
-   */
+  // Pedidos paginados
   async getOrders(page = 1, limit = 10) {
     return this.get(`/api/orders?page=${page}&limit=${limit}`);
   }
 
-  /**
-   * Process payment
-   */
-  async processPayment(orderID, paymentMethod, paymentDetails) {
+  // Pago de un pedido
+  async processPayment(orderID, cardDetails) {
     return this.post(`/api/orders/${orderID}/payment`, {
-      payment_method: paymentMethod,
-      payment_details: paymentDetails,
+      card_number: cardDetails.number,
+      card_holder: cardDetails.holder,
+      expiry_month: cardDetails.expiryMonth,
+      expiry_year: cardDetails.expiryYear,
+      cvv: cardDetails.cvv,
     });
   }
 
-  /**
-   * Get order confirmation
-   */
+  // Confirmacion del pedido
   async getOrderConfirmation(orderID) {
     return this.get(`/api/orders/${orderID}/confirmation`);
   }
 
-  /**
-   * TOKEN MANAGEMENT
-   */
-
-  /**
-   * Set tokens in storage
-   */
+  // TOKENS Y SESION
+  // Guardar tokens
   setTokens(accessToken, refreshToken) {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
@@ -393,9 +324,7 @@ class APIClient {
     localStorage.setItem('isLoggedIn', 'true');
   }
 
-  /**
-   * Clear tokens from storage
-   */
+  // Limpiar tokens
   clearTokens() {
     this.accessToken = null;
     this.refreshToken = null;
@@ -404,16 +333,12 @@ class APIClient {
     localStorage.removeItem('isLoggedIn');
   }
 
-  /**
-   * Check if user is authenticated
-   */
+  // Saber si el user sigue logueado
   isAuthenticated() {
     return !!this.accessToken;
   }
 
-  /**
-   * Get current user from token
-   */
+  // Leer datos del token actual
   getCurrentUser() {
     if (!this.accessToken) return null;
 
@@ -432,7 +357,7 @@ class APIClient {
   }
 }
 
-// Create global API client instance
+// Instanciamos el cliente global pa no repetir codigo
 console.log('Initializing API Client...');
 window.apiClient = new APIClient(
   localStorage.getItem('apiBaseURL') || 'http://localhost:8080'

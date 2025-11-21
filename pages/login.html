@@ -26,8 +26,8 @@
     <nav class="main-nav">
       <a href="../pages/about.html">Sobre nosotros</a>
       <a href="../index.html">Tiendas</a>
-      <a href="#">Promociones</a>
-      <a href="#">¡Nuevo!</a>
+      <a href="promotions.html">Promociones</a>
+      <a href="nuevo.html">¡Nuevo!</a>
     </nav>
 
     <div class="search-bar">
@@ -143,7 +143,7 @@
         // Normalize identifier for login
         let identifier = emailOrPhone;
         if (!emailOrPhone.includes('@')) {
-          // It's phone, ensure +57 prefix
+          // pa que quede con el codigo antes de escribirloooo que mano de errores por ese +57
           if (!emailOrPhone.startsWith('+')) {
             identifier = '+57' + emailOrPhone;
           }
@@ -152,7 +152,7 @@
         const response = await apiClient.login(identifier, password);
         
         if (response.access_token) {
-          // Login successful
+          // entraste sunga
           window.location.href = 'profile.html';
         } else {
           throw new Error(response.message || 'Login failed');

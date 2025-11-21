@@ -5,6 +5,7 @@
 
 main {
   margin: 60px;
+  margin-top: 0;
   padding: 20px;
 }
 
@@ -100,6 +101,7 @@ h1 {
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .producto-card img {
@@ -151,4 +153,60 @@ h1 {
 
 .producto-card button .cart-icon path {
   fill: black;
+}
+
+.quick-add {
+  position: absolute;
+  right: 12px;
+  bottom: 70px;
+  width: 220px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  z-index: 5;
+}
+
+.quick-add.hidden {
+  display: none;
+}
+
+.quick-add label {
+  font-size: 12px;
+  color: #444;
+}
+
+.quick-add select,
+.quick-add input[type="number"] {
+  width: 100%;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 6px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.quick-add button {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.quick-add button:hover {
+  background: #000;
+}
+
+.quick-add-message {
+  font-size: 12px;
+  color: #1b1b1b;
+}
+
+.quick-add-message.error {
+  color: #c62828;
 }

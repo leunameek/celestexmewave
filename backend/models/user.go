@@ -18,13 +18,11 @@ type User struct {
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 
-	// Relationships
 	Carts          []Cart          `gorm:"foreignKey:UserID" json:"-"`
 	Orders         []Order         `gorm:"foreignKey:UserID" json:"-"`
 	PasswordResets []PasswordReset `gorm:"foreignKey:UserID" json:"-"`
 }
 
-// BeforeCreate hook to generate UUID
 func (u *User) BeforeCreate(tx *gorm.DB) error {
 	if u.ID == uuid.Nil {
 		u.ID = uuid.New()
@@ -40,11 +38,9 @@ type PasswordReset struct {
 	Used      bool      `gorm:"default:false" json:"used"`
 	CreatedAt time.Time `json:"created_at"`
 
-	// Relationships
 	User User `gorm:"foreignKey:UserID" json:"-"`
 }
 
-// BeforeCreate hook to generate UUID
 func (pr *PasswordReset) BeforeCreate(tx *gorm.DB) error {
 	if pr.ID == uuid.Nil {
 		pr.ID = uuid.New()

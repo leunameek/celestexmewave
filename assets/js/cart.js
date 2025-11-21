@@ -1,12 +1,12 @@
-/**
- * Cart Management with Backend Integration
- * Handles cart operations using the backend API
- */
+// Manejo del carrito pegado al backend, todo relax pa no enredarnos
 
 let cartData = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
-    // Check if user is authenticated
+    // Dejamos el boton de pago apagado al inicio, por si las moscas
+    setProceedButtonState(false);
+
+    // Miramos si el user si esta logueado
     if (!apiClient.isAuthenticated()) {
         showLoginMessage();
         return;
@@ -15,9 +15,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     await loadCart();
 });
 
-/**
- * Show message for non-authenticated users
- */
+// Mensaje cute para los que no han iniciado sesion
 function showLoginMessage() {
     const cartItemsContainer = document.getElementById('cart-items');
     cartItemsContainer.innerHTML = `
@@ -36,11 +34,11 @@ function showLoginMessage() {
             </div>
         `;
     }
+
+    setProceedButtonState(false);
 }
 
-/**
- * Load cart from backend
- */
+// Cargamos carrito desde el backend, sin tanto rollo
 async function loadCart() {
     try {
         const response = await apiClient.getCart();
@@ -54,7 +52,7 @@ async function loadCart() {
             return;
         }
 
-        // Render each cart item
+        // Pintamos cada item del carrito
         for (const item of cartData.items) {
             const cartItem = createCartItemElement(item);
             cartItemsContainer.appendChild(cartItem);
@@ -68,30 +66,26 @@ async function loadCart() {
     }
 }
 
-/**
- * Show empty cart message
- */
+// Mensaje de carrito vacio pa que vuelvan a la tienda
 function showEmptyCart() {
     const cartItemsContainer = document.getElementById('cart-items');
     cartItemsContainer.innerHTML = `
         <div style="text-align: center; padding: 40px;">
             <p style="font-size: 18px; margin-bottom: 20px;">Tu carrito está vacío</p>
-            <a href="../index.html" style="background: #FF69B4; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">Ir a las Tiendas</a>
+            <a href="../index.html" style="background: #E73873; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">Ir a las Tiendas</a>
         </div>
     `;
 
     updateOrderSummary();
 }
 
-/**
- * Create cart item HTML element
- */
+// Armamos el HTML de cada item del carrito
 function createCartItemElement(item) {
     const cartItem = document.createElement('div');
     cartItem.className = 'cart-item';
     cartItem.dataset.itemId = item.id;
 
-    // Get product image (use API image_url or placeholder)
+    // Imagen del producto, si falla le mandamos placeholder
     const imageUrl = item.image_url
         ? (apiClient.baseURL + item.image_url)
         : '../assets/images/placeholder.png';
@@ -114,11 +108,9 @@ function createCartItemElement(item) {
     return cartItem;
 }
 
-/**
- * Add event listeners to cart items
- */
+// Eventos de los items (sumar, restar, borrar)
 function addEventListeners() {
-    // Quantity buttons
+    // Botones de cantidad
     document.querySelectorAll('.minus-btn').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             const itemId = e.currentTarget.dataset.itemId;
@@ -143,7 +135,7 @@ function addEventListeners() {
         });
     });
 
-    // Delete buttons
+    // Botones de borrar
     document.querySelectorAll('.delete-btn').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             const itemId = e.currentTarget.dataset.itemId;
@@ -152,22 +144,20 @@ function addEventListeners() {
     });
 }
 
-/**
- * Update cart item quantity
- */
+// Actualizar cantidad en el carrito rapidito
 async function updateCartItemQuantity(itemId, newQuantity) {
     try {
-        // Find the item to get its size
+        // Buscamos el item pa sacar la talla
         const item = cartData.items.find(i => i.id === itemId);
         if (!item) return;
 
         await apiClient.updateCartItem(itemId, newQuantity, item.size || '');
 
-        // Update UI immediately for better UX
+        // Actualizamos el UI de una pa que se vea fluido
         const quantityInput = document.querySelector(`[data-item-id="${itemId}"]`).parentElement.querySelector('.quantity-input');
         quantityInput.textContent = newQuantity;
 
-        // Reload cart to get updated totals
+        // Recargamos todo para recalcular totales
         await loadCart();
     } catch (error) {
         console.error('Error updating cart item:', error);
@@ -175,9 +165,7 @@ async function updateCartItemQuantity(itemId, newQuantity) {
     }
 }
 
-/**
- * Remove item from cart
- */
+// Quitar item del carrito
 async function removeFromCart(itemId) {
     try {
         await apiClient.removeItemFromCart(itemId);
@@ -188,14 +176,12 @@ async function removeFromCart(itemId) {
     }
 }
 
-/**
- * Update order summary
- */
+// Actualizar el resumen del pedido
 function updateOrderSummary() {
     const orderSummary = document.querySelector('.order-summary');
     if (!orderSummary) return;
 
-    // Clear existing items (keep only the total)
+    // Limpiamos items viejos, dejamos el total
     const existingItems = orderSummary.querySelectorAll('.summary-item:not(.summary-total)');
     existingItems.forEach(item => item.remove());
 
@@ -203,9 +189,10 @@ function updateOrderSummary() {
     const summaryTotal = orderSummary.querySelector('.summary-total');
 
     let total = 0;
+    const hasItems = cartData && cartData.items && cartData.items.length > 0;
 
-    if (cartData && cartData.items && cartData.items.length > 0) {
-        // Add each item to summary
+    if (hasItems) {
+        // Metemos cada item al resumen
         cartData.items.forEach(item => {
             const itemTotal = item.price * item.quantity;
             total += itemTotal;
@@ -220,29 +207,109 @@ function updateOrderSummary() {
         });
     }
 
-    // Update total
+    // Total final
     if (summaryTotal) {
         summaryTotal.querySelector('span:last-child').textContent = formatPrice(total);
     }
+
+    setProceedButtonState(hasItems);
 }
 
-/**
- * Format price to Colombian Pesos
- */
+// Formato de precio COP con puntos
 function formatPrice(price) {
     return '$' + price.toLocaleString('es-CO');
 }
 
-/**
- * Show error message
- */
+// Wrapper para errors
 function showError(message) {
-    const cartItemsContainer = document.getElementById('cart-items');
-    const errorDiv = document.createElement('div');
-    errorDiv.style.cssText = 'background: #ffebee; color: #c62828; padding: 12px; border-radius: 4px; margin: 10px 0;';
-    errorDiv.textContent = message;
-    cartItemsContainer.insertBefore(errorDiv, cartItemsContainer.firstChild);
-
-    // Remove error after 5 seconds
-    setTimeout(() => errorDiv.remove(), 5000);
+    showNotification(message, 'error');
 }
+
+// Notificacion casera para mostrar feedback
+function showNotification(message, type = 'info') {
+    // Creamos el div
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+
+    // Estilos al vuelo
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        background-color: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#ff4081' : '#2196F3'};
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        border: none;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 10000;
+        animation: slideIn 0.3s ease-out;
+        max-width: 400px;
+        word-wrap: break-word;
+    `;
+
+    // Lo pegamos al body
+    document.body.appendChild(notification);
+
+    // Se borra solito a los tres segs
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Habilitar o bloquear el boton de pagar segun haya cosas
+function setProceedButtonState(enabled) {
+    const proceedBtn = document.querySelector('.proceed-btn');
+    if (!proceedBtn) return;
+
+    if (enabled) {
+        proceedBtn.classList.remove('disabled');
+        proceedBtn.removeAttribute('aria-disabled');
+        proceedBtn.removeAttribute('tabindex');
+        proceedBtn.removeEventListener('click', preventProceedWhenDisabled);
+    } else {
+        proceedBtn.classList.add('disabled');
+        proceedBtn.setAttribute('aria-disabled', 'true');
+        proceedBtn.setAttribute('tabindex', '-1');
+        proceedBtn.addEventListener('click', preventProceedWhenDisabled);
+    }
+}
+
+function preventProceedWhenDisabled(event) {
+    // No dejamos que navegue si esta deshabilitado
+    event.preventDefault();
+}
+
+// Animaciones sencillas pa las notis
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);

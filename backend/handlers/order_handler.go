@@ -10,13 +10,20 @@ import (
 	"github.com/leunameek/celestexmewave/models"
 )
 
-// CreateOrderRequest represents a request to create an order
+// Peti para crear un pedido desde el carrito
 type CreateOrderRequest struct {
-	SessionID string `json:"session_id"`
-	Email     string `json:"email"`
+	SessionID          string `json:"session_id"`
+	ShippingName       string `json:"shipping_name"`
+	ShippingPhone      string `json:"shipping_phone"`
+	ShippingEmail      string `json:"shipping_email"`
+	ShippingCity       string `json:"shipping_city"`
+	ShippingAddress    string `json:"shipping_address"`
+	ShippingAddress2   string `json:"shipping_address2"`
+	ShippingPostalCode string `json:"shipping_postal_code"`
+	ShippingNotes      string `json:"shipping_notes"`
 }
 
-// ProcessPaymentRequest represents a payment request
+// Peti de pago (mock)
 type ProcessPaymentRequest struct {
 	CardNumber  string `json:"card_number" binding:"required"`
 	CardHolder  string `json:"card_holder" binding:"required"`
@@ -25,7 +32,7 @@ type ProcessPaymentRequest struct {
 	CVV         string `json:"cvv" binding:"required"`
 }
 
-// CreateOrder creates an order from cart
+// Crear pedido tomando el carrito
 func CreateOrder(c *gin.Context) {
 	var req CreateOrderRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -36,14 +43,14 @@ func CreateOrder(c *gin.Context) {
 	var userID *uuid.UUID
 	var sessionID *string
 
-	// Check if user is authenticated
+	// Miramos si esta logueado
 	if userIDStr, exists := c.Get("user_id"); exists {
 		if parsed, err := uuid.Parse(userIDStr.(string)); err == nil {
 			userID = &parsed
 		}
 	}
 
-	// Use session ID from request
+	// Usamos session del request
 	if req.SessionID != "" {
 		sessionID = &req.SessionID
 	}
@@ -53,21 +60,31 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 
-	// Get or create cart
+	// Sacamos o creamos el carrito
 	cart, err := services.GetOrCreateCart(userID, sessionID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Create order from cart
-	order, err := services.CreateOrderFromCart(cart.ID, userID, sessionID, req.Email)
+	// Crear el pedido con la info de envio
+	shippingInfo := services.ShippingInfo{
+		Name:       req.ShippingName,
+		Phone:      req.ShippingPhone,
+		Email:      req.ShippingEmail,
+		City:       req.ShippingCity,
+		Address:    req.ShippingAddress,
+		Address2:   req.ShippingAddress2,
+		PostalCode: req.ShippingPostalCode,
+		Notes:      req.ShippingNotes,
+	}
+	order, err := services.CreateOrderFromCart(cart.ID, userID, sessionID, shippingInfo)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Fetch order items
+	// Items del carrito pa responder
 	items, _ := services.GetCartItems(cart.ID)
 
 	var formattedItems []gin.H
@@ -91,7 +108,7 @@ func CreateOrder(c *gin.Context) {
 	})
 }
 
-// GetOrder retrieves an order by ID
+// Obtener pedido por id
 func GetOrder(c *gin.Context) {
 	orderID, err := uuid.Parse(c.Param("id"))
 	if err != nil {
@@ -127,7 +144,7 @@ func GetOrder(c *gin.Context) {
 	})
 }
 
-// GetOrders retrieves all orders for user or session
+// Listar pedidos del user o session
 func GetOrders(c *gin.Context) {
 	page := 1
 	limit := 10
@@ -148,7 +165,7 @@ func GetOrders(c *gin.Context) {
 	var total int64
 	var err error
 
-	// Check if user is authenticated
+	// Miramos si el user esta logueado
 	if userIDStr, exists := c.Get("user_id"); exists {
 		if userID, err := uuid.Parse(userIDStr.(string)); err == nil {
 			orders, total, err = services.GetOrdersByUser(userID, page, limit)
@@ -196,7 +213,7 @@ func GetOrders(c *gin.Context) {
 	})
 }
 
-// ProcessPayment processes payment for an order
+// Procesar pago del pedido (mock)
 func ProcessPayment(c *gin.Context) {
 	orderID, err := uuid.Parse(c.Param("id"))
 	if err != nil {
@@ -210,7 +227,7 @@ func ProcessPayment(c *gin.Context) {
 		return
 	}
 
-	// Process payment
+	// Procesamos el pago
 	paymentReq := services.PaymentRequest{
 		CardNumber:  req.CardNumber,
 		CardHolder:  req.CardHolder,
@@ -226,7 +243,7 @@ func ProcessPayment(c *gin.Context) {
 	}
 
 	if response.PaymentStatus == "failed" {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusPaymentRequired, gin.H{
 			"order_id":       response.OrderID,
 			"payment_status": response.PaymentStatus,
 			"message":        response.Message,
@@ -243,7 +260,7 @@ func ProcessPayment(c *gin.Context) {
 	})
 }
 
-// GetConfirmation retrieves order confirmation
+// Confirmacion del pedido
 func GetConfirmation(c *gin.Context) {
 	orderID, err := uuid.Parse(c.Param("id"))
 	if err != nil {
@@ -274,6 +291,6 @@ func GetConfirmation(c *gin.Context) {
 		"items":          formattedItems,
 		"status":         order.Status,
 		"payment_status": order.PaymentStatus,
-		"message":        "Thank you for your purchase!",
+		"message":        "¡Gracias por tu compra!",
 	})
 }

@@ -25,8 +25,8 @@
     <nav class="main-nav">
       <a href="../pages/about.html">Sobre nosotros</a>
       <a href="../index.html">Tiendas</a>
-      <a href="#">Promociones</a>
-      <a href="#">¡Nuevo!</a>
+      <a href="promotions.html">Promociones</a>
+      <a href="nuevo.html">¡Nuevo!</a>
     </nav>
 
     <div class="search-bar">
@@ -153,7 +153,7 @@
         errorMessage.style.display = 'none';
         successMessage.style.display = 'none';
         
-        // Determine if input is email or phone
+        // determina si es numero o email
         let email = '';
         let phone = '';
         
@@ -166,11 +166,11 @@
         const response = await apiClient.register(email, phone, firstName, lastName, password);
         
         if (response.access_token) {
-          // Registration successful
+          // resgistro exitosp
           successMessage.textContent = '¡Registro exitoso! Redirigiendo a tu perfil...';
           successMessage.style.display = 'block';
           
-          // Redirect to profile after 2 seconds
+          // timeout para redirigirte a la pagina de perfil
           setTimeout(() => {
             window.location.href = 'profile.html';
           }, 2000);

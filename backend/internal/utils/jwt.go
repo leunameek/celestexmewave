@@ -17,7 +17,6 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-// GenerateAccessToken generates a new access token
 func GenerateAccessToken(userID uuid.UUID, email, firstName, lastName string) (string, error) {
 	cfg := config.Get()
 	claims := Claims{
@@ -36,7 +35,6 @@ func GenerateAccessToken(userID uuid.UUID, email, firstName, lastName string) (s
 	return token.SignedString([]byte(cfg.JWTSecret))
 }
 
-// GenerateRefreshToken generates a new refresh token
 func GenerateRefreshToken(userID uuid.UUID) (string, error) {
 	cfg := config.Get()
 	claims := jwt.RegisteredClaims{
@@ -50,7 +48,6 @@ func GenerateRefreshToken(userID uuid.UUID) (string, error) {
 	return token.SignedString([]byte(cfg.JWTSecret))
 }
 
-// ValidateToken validates a JWT token and returns the claims
 func ValidateToken(tokenString string) (*Claims, error) {
 	cfg := config.Get()
 	claims := &Claims{}
@@ -73,7 +70,6 @@ func ValidateToken(tokenString string) (*Claims, error) {
 	return claims, nil
 }
 
-// ValidateRefreshToken validates a refresh token
 func ValidateRefreshToken(tokenString string) (uuid.UUID, error) {
 	cfg := config.Get()
 	claims := &jwt.RegisteredClaims{}

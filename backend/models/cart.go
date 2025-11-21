@@ -14,12 +14,10 @@ type Cart struct {
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 
-	// Relationships
 	User      *User      `gorm:"foreignKey:UserID" json:"-"`
 	CartItems []CartItem `gorm:"foreignKey:CartID" json:"-"`
 }
 
-// BeforeCreate hook to generate UUID
 func (c *Cart) BeforeCreate(tx *gorm.DB) error {
 	if c.ID == uuid.Nil {
 		c.ID = uuid.New()
@@ -36,12 +34,10 @@ type CartItem struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 
-	// Relationships
 	Cart    Cart    `gorm:"foreignKey:CartID" json:"-"`
 	Product Product `gorm:"foreignKey:ProductID" json:"-"`
 }
 
-// BeforeCreate hook to generate UUID
 func (ci *CartItem) BeforeCreate(tx *gorm.DB) error {
 	if ci.ID == uuid.Nil {
 		ci.ID = uuid.New()

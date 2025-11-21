@@ -14,29 +14,29 @@ import (
 )
 
 func main() {
-	// Load configuration
+	// Cargamos la config toda chill
 	cfg, err := config.Load()
 	if err != nil {
 		log.Fatalf("Failed to load configuration: %v", err)
 	}
 	log.Println("✓ Configuration loaded")
 
-	// Initialize database
+	// Montamos la base de datos sin drama
 	if err := database.Initialize(cfg); err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
 	}
 	log.Println("✓ Database initialized")
 
-	// Seed database
+	// Semillita de datos si toca
 	if err := services.SeedDatabase(); err != nil {
 		log.Printf("Warning: Failed to seed database: %v", err)
 	}
 
-	// Setup router
+	// Armamos el router bacan
 	r := router.SetupRouter()
 	log.Println("✓ Router configured")
 
-	// Start server in a goroutine
+	// Levantamos el server en una go routine pa no bloquear
 	go func() {
 		addr := fmt.Sprintf("%s:%d", cfg.ServerHost, cfg.ServerPort)
 		log.Printf("✓ Starting server on %s\n", addr)
@@ -45,7 +45,7 @@ func main() {
 		}
 	}()
 
-	// Wait for interrupt signal
+	// Esperamos la senal de cierre (ctrl+c vibes)
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 	<-sigChan

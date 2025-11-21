@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ErrorHandlingMiddleware handles panics and errors
+// ErrorHandlingMiddleware atrapa panics y errores, sin show
 func ErrorHandlingMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {

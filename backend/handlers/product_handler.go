@@ -13,7 +13,7 @@ import (
 	"github.com/leunameek/celestexmewave/internal/services"
 )
 
-// GetAllProducts retrieves all products with optional filtering
+// Trae productos con filtros opcionales, sin tanto show
 func GetAllProducts(c *gin.Context) {
 	store := c.Query("store")
 	category := c.Query("category")
@@ -52,7 +52,7 @@ func GetAllProducts(c *gin.Context) {
 		return
 	}
 
-	// Format products response
+	// Formateamos la respuesta pa que llegue chevere
 	var formattedProducts []gin.H
 	for _, product := range products {
 		sizes, _ := product.GetSizes()

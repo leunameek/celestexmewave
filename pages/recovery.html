@@ -25,8 +25,8 @@
     <nav class="main-nav">
       <a href="../pages/about.html">Sobre nosotros</a>
       <a href="../index.html">Tiendas</a>
-      <a href="#">Promociones</a>
-      <a href="#">¡Nuevo!</a>
+      <a href="promotions.html">Promociones</a>
+      <a href="nuevo.html">¡Nuevo!</a>
     </nav>
 
     <div class="search-bar">
@@ -69,12 +69,13 @@
         </div>
 
         <p class="login-subtitle">Recupera tu contraseña</p>
+        <div id="recovery-message" class="error-message" style="display:none; margin-bottom: 10px;"></div>
 
         <div id="step1" class="recovery-step">
           <form class="login-form">
             <div class="input-group">
               <img src="../assets/icons/email_icon.svg" alt="email" class="input-icon">
-              <input type="email" id="recovery-email" placeholder="Email" required>
+              <input type="text" id="recovery-email" placeholder="Email o teléfono" required>
             </div>
             <button type="button" id="send-code-btn" class="btn-login">Enviar código</button>
           </form>
@@ -86,12 +87,6 @@
               <img src="../assets/icons/key_icon.svg" alt="code" class="input-icon">
               <input type="text" id="recovery-code" placeholder="Código de verificación" required>
             </div>
-            <button type="button" id="verify-code-btn" class="btn-login">Verificar código</button>
-          </form>
-        </div>
-
-        <div id="step3" class="recovery-step" style="display: none;">
-          <form class="login-form">
             <div class="input-group">
               <img src="../assets/icons/key_icon.svg" alt="new password" class="input-icon">
               <input type="password" id="new-password" placeholder="Nueva contraseña" required>

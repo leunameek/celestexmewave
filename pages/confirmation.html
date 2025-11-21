@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Celeste & Mewave</title>
+  <title>Confirmación de Pedido - Celeste & Mewave</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">            
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles/normalize.css">
   <link rel="stylesheet" href="../styles/styles.css">
   <link rel="stylesheet" href="../styles/header-styles.css">
-  <link rel="stylesheet" href="../styles/celeste-styles.css">
+  <link rel="stylesheet" href="../styles/confirmation-styles.css">
 </head>
 <body>
   <header class="site-header">
@@ -39,19 +39,24 @@
     </div>
   </header>
 
-  <main>
-    <h1>¡New Arrivals!</h1>
-
-    <section class="banner">
-      <div class="banner-track">
-        <img src="../assets/images/BannerCeleste1.png" alt="Banner 1">
-        <img src="../assets/images/BannerCeleste2.png" alt="Banner 2">
-        <img src="../assets/images/BannerCeleste3.png" alt="Banner 3">
-        <img src="../assets/images/BannerCeleste4.png" alt="Banner 4">
+  <main class="confirmation-container">
+    <div class="confirmation-card">
+      <div class="confirmation-icon">
+        <img src="../assets/icons/confirm_icon.svg" alt="Confirmación">
       </div>
-    </section>
-  </main>
+      <h1>¡Pedido Confirmado!</h1>
+      <p>Gracias por tu compra. Tu pedido ha sido procesado exitosamente.</p>
 
+      <div class="order-details" id="order-details">
+        
+      </div>
+
+      <div class="confirmation-actions">
+        <a href="../index.html" class="btn-primary">Continuar Comprando</a>
+        <a href="profile.html" class="btn-secondary">Ver Mis Pedidos</a>
+      </div>
+    </div>
+  </main>
 
   <footer class="site-footer">
     <div class="footer-top">
@@ -87,7 +92,52 @@
   </footer>
 
   <script src="../assets/js/api-client.js"></script>
-  <script src="../assets/js/celeste-card.js"></script>
   <script src="../assets/js/header.js"></script>
+  <script>
+    // pa q quede en pesos colombianos
+    function formatPriceColombian(price) {
+      const intPrice = Math.floor(price);
+      return intPrice.toLocaleString('es-CO').replace(/,/g, '.');
+    }
+
+    // carga los detalles del pedido al cargar la página
+    document.addEventListener('DOMContentLoaded', async function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = urlParams.get('order_id');
+
+      if (orderId) {
+        try {
+          const confirmation = await apiClient.getOrderConfirmation(orderId);
+          displayOrderDetails(confirmation);
+        } catch (error) {
+          console.error('Error loading confirmation:', error);
+          document.getElementById('order-details').innerHTML = '<p>Error al cargar los detalles del pedido.</p>';
+        }
+      }
+    });
+
+    function displayOrderDetails(order) {
+      const details = document.getElementById('order-details');
+      details.innerHTML = `
+        <div class="order-info">
+          <p><strong>ID del Pedido:</strong> ${order.order_id}</p>
+          <p><strong>Fecha del Pedido:</strong> ${new Date(order.order_date).toLocaleDateString()}</p>
+          <p><strong>Total:</strong> $${formatPriceColombian(order.total_amount)}</p>
+          <p><strong>Estado:</strong> ${order.status}</p>
+          <p><strong>Estado del Pago:</strong> ${order.payment_status}</p>
+        </div>
+        <div class="order-items">
+          <h3>Productos:</h3>
+          <ul>
+            ${order.items.map(item => `
+              <li>
+                ${item.product_name} - Cantidad: ${item.quantity}, Talla: ${item.size}, Precio: $${formatPriceColombian(item.unit_price)}
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      `;
+    }
+  </script>
 </body>
 </html>

@@ -8,21 +8,27 @@ import (
 )
 
 type Order struct {
-	ID            uuid.UUID  `gorm:"type:uuid;primaryKey" json:"id"`
-	UserID        *uuid.UUID `gorm:"type:uuid;index" json:"user_id"`
-	SessionID     *string    `gorm:"type:varchar(255);index" json:"session_id"`
-	TotalAmount   float64    `gorm:"type:decimal(10,2);not null" json:"total_amount"`
-	Status        string     `gorm:"type:varchar(50);default:'pending'" json:"status"`         // pending, confirmed, shipped, delivered
-	PaymentStatus string     `gorm:"type:varchar(50);default:'pending'" json:"payment_status"` // pending, completed, failed
-	CreatedAt     time.Time  `json:"created_at"`
-	UpdatedAt     time.Time  `json:"updated_at"`
+	ID                 uuid.UUID  `gorm:"type:uuid;primaryKey" json:"id"`
+	UserID             *uuid.UUID `gorm:"type:uuid;index" json:"user_id"`
+	SessionID          *string    `gorm:"type:varchar(255);index" json:"session_id"`
+	TotalAmount        float64    `gorm:"type:decimal(10,2);not null" json:"total_amount"`
+	Status             string     `gorm:"type:varchar(50);default:'pending'" json:"status"`         // pending, confirmed, shipped, delivered
+	PaymentStatus      string     `gorm:"type:varchar(50);default:'pending'" json:"payment_status"` // pending, completed, failed
+	ShippingName       string     `gorm:"type:varchar(255)" json:"shipping_name"`
+	ShippingPhone      string     `gorm:"type:varchar(20)" json:"shipping_phone"`
+	ShippingEmail      string     `gorm:"type:varchar(255)" json:"shipping_email"`
+	ShippingCity       string     `gorm:"type:varchar(255)" json:"shipping_city"`
+	ShippingAddress    string     `gorm:"type:text" json:"shipping_address"`
+	ShippingAddress2   string     `gorm:"type:text" json:"shipping_address2"`
+	ShippingPostalCode string     `gorm:"type:varchar(10)" json:"shipping_postal_code"`
+	ShippingNotes      string     `gorm:"type:text" json:"shipping_notes"`
+	CreatedAt          time.Time  `json:"created_at"`
+	UpdatedAt          time.Time  `json:"updated_at"`
 
-	// Relationships
 	User       *User       `gorm:"foreignKey:UserID" json:"-"`
 	OrderItems []OrderItem `gorm:"foreignKey:OrderID" json:"-"`
 }
 
-// BeforeCreate hook to generate UUID
 func (o *Order) BeforeCreate(tx *gorm.DB) error {
 	if o.ID == uuid.Nil {
 		o.ID = uuid.New()
@@ -39,12 +45,10 @@ type OrderItem struct {
 	UnitPrice float64   `gorm:"type:decimal(10,2);not null" json:"unit_price"`
 	CreatedAt time.Time `json:"created_at"`
 
-	// Relationships
 	Order   Order   `gorm:"foreignKey:OrderID" json:"-"`
 	Product Product `gorm:"foreignKey:ProductID" json:"-"`
 }
 
-// BeforeCreate hook to generate UUID
 func (oi *OrderItem) BeforeCreate(tx *gorm.DB) error {
 	if oi.ID == uuid.Nil {
 		oi.ID = uuid.New()

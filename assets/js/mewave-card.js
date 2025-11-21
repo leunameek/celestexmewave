@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // Use API Client to fetch products
+  // Jalamos los productos de Mewave con el api, full relax
   apiClient.getAllProducts('Mewave')
     .then(response => {
       const products = response.products || [];
-      console.log('Fetched products for Mewave:', products); // Debug log
+      console.log('trajimos productos de Mewave:', products); // logcito de chisme
       const categories = {};
       products.forEach(product => {
         if (!categories[product.category]) {
@@ -72,6 +72,22 @@ function createProductCard(product) {
 
   card.appendChild(info);
 
+  const quickAdd = createQuickAdd(product, card);
+  card.appendChild(quickAdd);
+
+  const closeQuickAdd = () => quickAdd.classList.add('hidden');
+
+  button.addEventListener('click', (e) => {
+    e.stopPropagation();
+    quickAdd.classList.toggle('hidden');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!card.contains(e.target)) {
+      closeQuickAdd();
+    }
+  });
+
   card.style.cursor = 'pointer';
   card.addEventListener('click', () => {
     localStorage.setItem('selectedProduct', JSON.stringify(product));
@@ -83,4 +99,74 @@ function createProductCard(product) {
 
 function formatPrice(price) {
   return '$' + (price / 1000).toFixed(0) + '.000';
+}
+
+function createQuickAdd(product, card) {
+  const container = document.createElement('div');
+  container.className = 'quick-add hidden';
+  container.addEventListener('click', (e) => e.stopPropagation());
+
+  const sizeLabel = document.createElement('label');
+  sizeLabel.textContent = 'Talla';
+  const sizeSelect = document.createElement('select');
+  const sizes = Array.isArray(product.sizes) && product.sizes.length ? product.sizes : ['Talla única'];
+  sizes.forEach(size => {
+    const opt = document.createElement('option');
+    opt.value = size;
+    opt.textContent = size;
+    sizeSelect.appendChild(opt);
+  });
+
+  const qtyLabel = document.createElement('label');
+  qtyLabel.textContent = 'Cantidad';
+  const qtyInput = document.createElement('input');
+  qtyInput.type = 'number';
+  qtyInput.min = '1';
+  qtyInput.max = '10';
+  qtyInput.value = '1';
+
+  const message = document.createElement('div');
+  message.className = 'quick-add-message';
+
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.textContent = 'Agregar al carrito';
+  addBtn.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    const qty = parseInt(qtyInput.value, 10) || 1;
+    const size = sizeSelect.value || '';
+
+    if (!apiClient.isAuthenticated()) {
+      message.textContent = 'Inicia sesión para agregar al carrito';
+      message.classList.add('error');
+      return;
+    }
+
+    try {
+      message.textContent = 'Agregando...';
+      message.classList.remove('error');
+      await apiClient.addItemToCart(product.id, qty, size === 'Talla única' ? '' : size);
+      message.textContent = 'Añadido al carrito';
+      if (typeof window.refreshCartCount === 'function') {
+        window.refreshCartCount();
+      }
+      setTimeout(() => {
+        container.classList.add('hidden');
+        message.textContent = '';
+      }, 800);
+    } catch (err) {
+      console.error('Add to cart error:', err);
+      message.textContent = 'No se pudo agregar';
+      message.classList.add('error');
+    }
+  });
+
+  container.appendChild(sizeLabel);
+  container.appendChild(sizeSelect);
+  container.appendChild(qtyLabel);
+  container.appendChild(qtyInput);
+  container.appendChild(addBtn);
+  container.appendChild(message);
+
+  return container;
 }

@@ -1,47 +1,90 @@
 document.addEventListener('DOMContentLoaded', function() {
     const step1 = document.getElementById('step1');
     const step2 = document.getElementById('step2');
-    const step3 = document.getElementById('step3');
 
     const sendCodeBtn = document.getElementById('send-code-btn');
-    const verifyCodeBtn = document.getElementById('verify-code-btn');
     const savePasswordBtn = document.getElementById('save-password-btn');
 
     const recoveryEmail = document.getElementById('recovery-email');
     const recoveryCode = document.getElementById('recovery-code');
     const newPassword = document.getElementById('new-password');
     const confirmPassword = document.getElementById('confirm-password');
+    const messageBox = document.getElementById('recovery-message');
 
-    sendCodeBtn.addEventListener('click', function() {
-        if (recoveryEmail.value.trim() === '') {
-            alert('Por favor, ingresa tu email.');
+    let currentIdentifier = '';
+
+    function showMessage(text, type = 'info') {
+        if (!messageBox) return;
+        messageBox.textContent = text;
+        messageBox.style.display = 'block';
+        messageBox.style.color = type === 'error' ? '#c62828' : '#2e7d32';
+    }
+
+    function hideMessage() {
+        if (messageBox) {
+            messageBox.style.display = 'none';
+            messageBox.textContent = '';
+        }
+    }
+
+    sendCodeBtn.addEventListener('click', async function() {
+        hideMessage();
+        const identifier = recoveryEmail.value.trim();
+        if (!identifier) {
+            showMessage('Por favor, ingresa tu email o teléfono.', 'error');
             return;
         }
-        alert('Código enviado a tu email.');
-        step1.style.display = 'none';
-        step2.style.display = 'block';
+
+        try {
+            sendCodeBtn.disabled = true;
+            sendCodeBtn.textContent = 'Enviando...';
+            currentIdentifier = identifier;
+            await apiClient.requestPasswordReset(identifier);
+            showMessage('Código enviado. Revisa tu correo o teléfono.');
+            step1.style.display = 'none';
+            step2.style.display = 'block';
+        } catch (error) {
+            console.error('Recovery send code error:', error);
+            showMessage(error.message || 'No pudimos enviar el código.', 'error');
+        } finally {
+            sendCodeBtn.disabled = false;
+            sendCodeBtn.textContent = 'Enviar código';
+        }
     });
 
-    verifyCodeBtn.addEventListener('click', function() {
-        if (recoveryCode.value.trim() === '') {
-            alert('Por favor, ingresa el código.');
-            return;
-        }
-        alert('Código verificado.');
-        step2.style.display = 'none';
-        step3.style.display = 'block';
-    });
+    savePasswordBtn.addEventListener('click', async function() {
+        hideMessage();
+        const code = recoveryCode.value.trim();
+        const password = newPassword.value.trim();
+        const confirm = confirmPassword.value.trim();
 
-    savePasswordBtn.addEventListener('click', function() {
-        if (newPassword.value.trim() === '' || confirmPassword.value.trim() === '') {
-            alert('Por favor, completa todos los campos.');
+        if (!code || !password || !confirm) {
+            showMessage('Por favor, completa todos los campos.', 'error');
             return;
         }
-        if (newPassword.value !== confirmPassword.value) {
-            alert('Las contraseñas no coinciden.');
+        if (password !== confirm) {
+            showMessage('Las contraseñas no coinciden.', 'error');
             return;
         }
-        alert('Contraseña actualizada exitosamente.');
-        window.location.href = 'login.html';
+        if (!currentIdentifier) {
+            showMessage('Primero solicita el código.', 'error');
+            return;
+        }
+
+        try {
+            savePasswordBtn.disabled = true;
+            savePasswordBtn.textContent = 'Guardando...';
+            await apiClient.verifyResetCode(currentIdentifier, code, password);
+            showMessage('Contraseña actualizada correctamente.');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1200);
+        } catch (error) {
+            console.error('Recovery save error:', error);
+            showMessage(error.message || 'No pudimos actualizar la contraseña.', 'error');
+        } finally {
+            savePasswordBtn.disabled = false;
+            savePasswordBtn.textContent = 'Guardar';
+        }
     });
 });

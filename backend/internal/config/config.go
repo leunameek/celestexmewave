@@ -10,7 +10,7 @@ import (
 )
 
 type Config struct {
-	// Database
+	// Database, datos de la DB bien chill
 	DBHost     string
 	DBPort     int
 	DBUser     string
@@ -20,40 +20,40 @@ type Config struct {
 	DBURL      string // Full connection URL for Supabase
 	DBDriver   string // pgx for pgx/v5 driver
 
-	// Server
+	// Server, donde va a correr esto
 	ServerPort int
 	ServerEnv  string
 	ServerHost string
 
-	// JWT
+	// JWT, llaves y expiraciones
 	JWTSecret              string
 	JWTExpiration          time.Duration
 	RefreshTokenExpiration time.Duration
 
-	// Email
+	// Email, para mandar correitos
 	SMTPHost string
 	SMTPPort int
 	SMTPUser string
 	SMTPPass string
 	SMTPFrom string
 
-	// Frontend
+	// Frontend, URL del cliente
 	FrontendURL string
 
-	// File Upload
+	// File Upload, rutas y tamanos
 	UploadDir     string
 	MaxUploadSize int64
 }
 
 var cfg *Config
 
-// Load loads configuration from environment variables
+// Load carga la config desde variables de entorno, sin drama
 func Load() (*Config, error) {
-	// Load .env file if it exists
+	// Cargamos .env si existe por ahi
 	_ = godotenv.Load()
 
 	config := &Config{
-		// Database - Prioritize Supabase (DATABASE_URL) over individual parameters
+		// Database - le damos prioridad a Supabase con DATABASE_URL
 		DBHost:     getEnv("DB_HOST", ""),
 		DBPort:     getEnvInt("DB_PORT", 5432),
 		DBUser:     getEnv("DB_USER", ""),
@@ -92,7 +92,7 @@ func Load() (*Config, error) {
 	return config, nil
 }
 
-// Get returns the global config instance
+// Get devuelve la config global
 func Get() *Config {
 	if cfg == nil {
 		Load()
@@ -100,15 +100,15 @@ func Get() *Config {
 	return cfg
 }
 
-// GetDSN returns the PostgreSQL connection string
-// Prioritizes Supabase (DATABASE_URL) over traditional connection parameters
+// GetDSN devuelve la cadena de conexion de Postgres
+// Primero intentamos con Supabase (DATABASE_URL)
 func (c *Config) GetDSN() string {
-	// Supabase is the primary option - DATABASE_URL must be set
+	// Supabase primero, asi debe venir el env
 	if c.DBURL != "" {
 		return c.DBURL
 	}
 
-	// Fallback to individual parameters (for local development only)
+	// Si no, usamos los params locales
 	if c.DBHost != "" && c.DBUser != "" && c.DBPassword != "" {
 		return fmt.Sprintf(
 			"host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
@@ -121,11 +121,11 @@ func (c *Config) GetDSN() string {
 		)
 	}
 
-	// No valid configuration found
+	// Si nada funciona, devolvemos vacio
 	return ""
 }
 
-// Helper functions
+// Helpers basicos
 func getEnv(key, defaultVal string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value

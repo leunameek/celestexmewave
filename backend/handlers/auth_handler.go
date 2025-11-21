@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -8,7 +9,7 @@ import (
 	"github.com/leunameek/celestexmewave/internal/utils"
 )
 
-// RegisterRequest represents a registration request
+// Peticion de registro, formato chill
 type RegisterRequest struct {
 	Email     string `json:"email"`
 	Phone     string `json:"phone"`
@@ -17,24 +18,24 @@ type RegisterRequest struct {
 	Password  string `json:"password" binding:"required"`
 }
 
-// LoginRequest represents a login request
+// Peticion de login, bien basica
 type LoginRequest struct {
 	EmailOrPhone string `json:"email" binding:"required"`
 	Password     string `json:"password" binding:"required"`
 }
 
-// RefreshTokenRequest represents a refresh token request
+// Peticion para refrescar token
 type RefreshTokenRequest struct {
 	RefreshToken string `json:"refresh_token" binding:"required"`
 }
 
-// PasswordResetRequest represents a password reset request
+// Peticion pa resetear clave
 type PasswordResetRequest struct {
 	Email string `json:"email"`
 	Phone string `json:"phone"`
 }
 
-// VerifyResetCodeRequest represents a reset code verification request
+// Peticion pa verificar codigo de reset
 type VerifyResetCodeRequest struct {
 	Email       string `json:"email"`
 	Phone       string `json:"phone"`
@@ -42,7 +43,7 @@ type VerifyResetCodeRequest struct {
 	NewPassword string `json:"new_password" binding:"required"`
 }
 
-// Register registers a new user
+// Registro de usuario nuevo
 func Register(c *gin.Context) {
 	var req RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -56,7 +57,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// Generate tokens for auto-login
+	// Generamos tokens pa que quede logueado de una
 	emailOrPhone := req.Email
 	if emailOrPhone == "" {
 		emailOrPhone = req.Phone
@@ -88,7 +89,7 @@ func Register(c *gin.Context) {
 	})
 }
 
-// Login authenticates a user
+// Login para autenticar
 func Login(c *gin.Context) {
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -98,7 +99,11 @@ func Login(c *gin.Context) {
 
 	user, accessToken, refreshToken, err := services.LoginUser(req.EmailOrPhone, req.Password)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		if errors.Is(err, services.ErrInvalidCredentials) {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Credenciales inválidas"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo iniciar sesión"})
 		return
 	}
 
@@ -115,7 +120,7 @@ func Login(c *gin.Context) {
 	})
 }
 
-// RefreshToken refreshes the access token
+// Refrescar el token de acceso
 func RefreshToken(c *gin.Context) {
 	var req RefreshTokenRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -135,14 +140,13 @@ func RefreshToken(c *gin.Context) {
 	})
 }
 
-// Logout logs out a user
+// Logout para limpiar sesion (jwt es stateless)
 func Logout(c *gin.Context) {
-	// In a stateless JWT system, logout is handled on the client side
-	// by removing the token from localStorage
+	// En JWT stateless, el logout lo hace el cliente borrando el token
 	c.JSON(http.StatusOK, gin.H{"message": "logged out successfully"})
 }
 
-// RequestPasswordReset requests a password reset code
+// Pedir codigo de reset
 func RequestPasswordReset(c *gin.Context) {
 	var req PasswordResetRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -167,7 +171,7 @@ func RequestPasswordReset(c *gin.Context) {
 	})
 }
 
-// VerifyResetCode verifies a reset code and updates the password
+// Verificar codigo de reset y cambiar clave
 func VerifyResetCode(c *gin.Context) {
 	var req VerifyResetCodeRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

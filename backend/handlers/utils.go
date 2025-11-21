@@ -4,24 +4,23 @@ import (
 	"strings"
 )
 
-// cleanImagePath extracts the relative path from the stored path
-// e.g., "../assets/images/celeste_images/img.png" -> "celeste_images/img.png"
+// cleanImagePath deja solo la ruta relativa del asset
+// Ej: "../assets/images/celeste_images/img.png" -> "celeste_images/img.png"
 func cleanImagePath(path string) string {
-	// Normalize separators to forward slashes
+	// Normalizamos separadores a slash normal
 	path = strings.ReplaceAll(path, "\\", "/")
 
-	// Remove ../assets/images/ prefix if present
+	// Quitamos el prefijo ../assets/images/ si esta
 	if idx := strings.Index(path, "assets/images/"); idx != -1 {
 		return path[idx+len("assets/images/"):]
 	}
 
-	// Fallback: try to find just "images/"
+	// Plan B: buscamos "images/"
 	if idx := strings.Index(path, "images/"); idx != -1 {
 		return path[idx+len("images/"):]
 	}
 
-	// Safety fallback: just return the filename to avoid breaking the URL structure
-	// This might break the image link if it's in a subdir, but it prevents 404s on the route itself
+	// Ultimo recurso: devolvemos solo el filename para no romper la URL (puede quedar en blanco)
 	parts := strings.Split(path, "/")
 	if len(parts) > 0 {
 		return parts[len(parts)-1]

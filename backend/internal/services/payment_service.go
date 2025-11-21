@@ -2,10 +2,12 @@ package services
 
 import (
 	"github.com/google/uuid"
+	"github.com/leunameek/celestexmewave/internal/database"
 	"github.com/leunameek/celestexmewave/internal/utils"
+	"github.com/leunameek/celestexmewave/models"
 )
 
-// PaymentRequest represents a payment request
+// PaymentRequest es la peti de pago fake
 type PaymentRequest struct {
 	CardNumber  string
 	CardHolder  string
@@ -14,7 +16,7 @@ type PaymentRequest struct {
 	CVV         string
 }
 
-// PaymentResponse represents a payment response
+// PaymentResponse es la respuesta del pago mock
 type PaymentResponse struct {
 	OrderID          string
 	PaymentStatus    string
@@ -23,10 +25,17 @@ type PaymentResponse struct {
 	ConfirmationSent bool
 }
 
-// ProcessMockPayment processes a mock payment
+// ProcessMockPayment procesa el pago de mentiras
 func ProcessMockPayment(orderID uuid.UUID, payment PaymentRequest) (*PaymentResponse, error) {
-	// Validate card details
+	// Helper pa marcar como fallido y cancelar
+	markOrderFailed := func(reason string) {
+		_, _ = UpdatePaymentStatus(orderID, "failed")
+		_, _ = UpdateOrderStatus(orderID, "cancelled")
+	}
+
+	// Validamos los datos de la tarjeta
 	if !utils.ValidateCardNumber(payment.CardNumber) {
+		markOrderFailed("invalid card number")
 		return &PaymentResponse{
 			OrderID:       orderID.String(),
 			PaymentStatus: "failed",
@@ -35,6 +44,7 @@ func ProcessMockPayment(orderID uuid.UUID, payment PaymentRequest) (*PaymentResp
 	}
 
 	if !utils.ValidateCVV(payment.CVV) {
+		markOrderFailed("invalid CVV")
 		return &PaymentResponse{
 			OrderID:       orderID.String(),
 			PaymentStatus: "failed",
@@ -43,6 +53,7 @@ func ProcessMockPayment(orderID uuid.UUID, payment PaymentRequest) (*PaymentResp
 	}
 
 	if !utils.ValidateExpiryDate(payment.ExpiryMonth, payment.ExpiryYear) {
+		markOrderFailed("card expired")
 		return &PaymentResponse{
 			OrderID:       orderID.String(),
 			PaymentStatus: "failed",
@@ -50,10 +61,10 @@ func ProcessMockPayment(orderID uuid.UUID, payment PaymentRequest) (*PaymentResp
 		}, nil
 	}
 
-	// Mock payment processing - always succeeds for demo
+	// Pago mock: siempre pasa en modo demo
 	transactionID := "TXN_" + orderID.String()[:8]
 
-	// Update order payment status
+	// Actualizamos status de pago
 	_, err := UpdatePaymentStatus(orderID, "completed")
 	if err != nil {
 		return &PaymentResponse{
@@ -63,7 +74,7 @@ func ProcessMockPayment(orderID uuid.UUID, payment PaymentRequest) (*PaymentResp
 		}, nil
 	}
 
-	// Update order status to confirmed
+	// Cambiamos el status del pedido a confirmado
 	_, err = UpdateOrderStatus(orderID, "confirmed")
 	if err != nil {
 		return &PaymentResponse{
@@ -71,6 +82,21 @@ func ProcessMockPayment(orderID uuid.UUID, payment PaymentRequest) (*PaymentResp
 			PaymentStatus: "failed",
 			Message:       "failed to confirm order",
 		}, nil
+	}
+
+	// Cargamos pedido e items para mandar correo de confirmacion
+	var order models.Order
+	if err := database.DB.Preload("OrderItems.Product").First(&order, "id = ?", orderID).Error; err == nil && order.ShippingEmail != "" {
+		var items []map[string]interface{}
+		for _, item := range order.OrderItems {
+			items = append(items, map[string]interface{}{
+				"product_name": item.Product.Name,
+				"quantity":     item.Quantity,
+				"size":         item.Size,
+				"unit_price":   item.UnitPrice,
+			})
+		}
+		_ = utils.SendOrderConfirmationEmail(order.ShippingEmail, order.ID.String(), order.TotalAmount, items)
 	}
 
 	return &PaymentResponse{
@@ -82,17 +108,17 @@ func ProcessMockPayment(orderID uuid.UUID, payment PaymentRequest) (*PaymentResp
 	}, nil
 }
 
-// ValidateCardNumber validates a card number using Luhn algorithm
+// ValidateCardNumber usa Luhn y devuelve si pasa
 func ValidateCardNumber(cardNumber string) bool {
 	return utils.ValidateCardNumber(cardNumber)
 }
 
-// ValidateCVV validates a CVV
+// ValidateCVV revisa el CVV
 func ValidateCVV(cvv string) bool {
 	return utils.ValidateCVV(cvv)
 }
 
-// ValidateExpiryDate validates an expiry date
+// ValidateExpiryDate mira si la fecha exp es valida
 func ValidateExpiryDate(month, year int) bool {
 	return utils.ValidateExpiryDate(month, year)
 }

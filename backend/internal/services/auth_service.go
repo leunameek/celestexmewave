@@ -1,7 +1,9 @@
 package services
 
 import (
+	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -10,9 +12,12 @@ import (
 	"github.com/leunameek/celestexmewave/models"
 )
 
-// RegisterUser registers a new user
+// ErrInvalidCredentials sale cuando las credenciales estan mal
+var ErrInvalidCredentials = errors.New("invalid credentials")
+
+// RegisterUser mete un user nuevo en la DB
 func RegisterUser(email, phone, firstName, lastName, password string) (*models.User, error) {
-	// Validate input
+	// Validamos los datos
 	if email == "" && phone == "" {
 		return nil, fmt.Errorf("email or phone is required")
 	}
@@ -33,7 +38,7 @@ func RegisterUser(email, phone, firstName, lastName, password string) (*models.U
 		return nil, fmt.Errorf("invalid phone format")
 	}
 
-	// Check if user already exists
+	// Revisamos si ya existe
 	var existingUser models.User
 	if email != "" {
 		if err := database.DB.Where("email = ?", email).First(&existingUser).Error; err == nil {
@@ -47,13 +52,13 @@ func RegisterUser(email, phone, firstName, lastName, password string) (*models.U
 		}
 	}
 
-	// Hash password
+	// Hasheamos la clave
 	passwordHash, err := utils.HashPassword(password)
 	if err != nil {
 		return nil, fmt.Errorf("failed to hash password: %w", err)
 	}
 
-	// Create user
+	// Creamos el user
 	user := &models.User{
 		ID:           uuid.New(),
 		FirstName:    firstName,
@@ -74,7 +79,7 @@ func RegisterUser(email, phone, firstName, lastName, password string) (*models.U
 		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
 
-	// Send registration email if email is provided
+	// Enviamos correo de bienvenida si hay email
 	if email != "" {
 		_ = utils.SendRegistrationEmail(email, firstName)
 	}
@@ -82,20 +87,20 @@ func RegisterUser(email, phone, firstName, lastName, password string) (*models.U
 	return user, nil
 }
 
-// LoginUser authenticates a user and returns JWT tokens
+// LoginUser valida user y devuelve tokens
 func LoginUser(emailOrPhone, password string) (*models.User, string, string, error) {
-	// Find user by email or phone
+	// Buscamos user por email o telefono
 	var user models.User
 	if err := database.DB.Where("email = ? OR phone = ?", emailOrPhone, emailOrPhone).First(&user).Error; err != nil {
-		return nil, "", "", fmt.Errorf("invalid credentials")
+		return nil, "", "", ErrInvalidCredentials
 	}
 
-	// Verify password
+	// Verificamos la clave
 	if !utils.VerifyPassword(user.PasswordHash, password) {
-		return nil, "", "", fmt.Errorf("invalid credentials")
+		return nil, "", "", ErrInvalidCredentials
 	}
 
-	// Generate tokens
+	// Sacamos tokens
 	accessToken, err := utils.GenerateAccessToken(user.ID, emailOrPhone, user.FirstName, user.LastName)
 	if err != nil {
 		return nil, "", "", fmt.Errorf("failed to generate access token: %w", err)
@@ -109,20 +114,20 @@ func LoginUser(emailOrPhone, password string) (*models.User, string, string, err
 	return &user, accessToken, refreshToken, nil
 }
 
-// RefreshAccessToken generates a new access token from a refresh token
+// RefreshAccessToken saca un access token nuevo desde refresh
 func RefreshAccessToken(refreshToken string) (string, error) {
 	userID, err := utils.ValidateRefreshToken(refreshToken)
 	if err != nil {
 		return "", fmt.Errorf("invalid refresh token: %w", err)
 	}
 
-	// Get user
+	// Buscamos el user
 	var user models.User
 	if err := database.DB.First(&user, "id = ?", userID).Error; err != nil {
 		return "", fmt.Errorf("user not found: %w", err)
 	}
 
-	// Generate new access token
+	// Generamos token nuevo
 	identifier := ""
 	if user.Email != nil {
 		identifier = *user.Email
@@ -137,81 +142,89 @@ func RefreshAccessToken(refreshToken string) (string, error) {
 	return accessToken, nil
 }
 
-// RequestPasswordReset creates a password reset code
+// RequestPasswordReset crea codigo de reset
 func RequestPasswordReset(emailOrPhone string) (string, error) {
-	// Find user
+	// Buscamos el user
 	var user models.User
 	if err := database.DB.Where("email = ? OR phone = ?", emailOrPhone, emailOrPhone).First(&user).Error; err != nil {
 		return "", fmt.Errorf("user not found")
 	}
 
-	// Generate reset code
-	resetCode := utils.GenerateResetCode()
+	// Intentamos crear codigo, reintentamos si choca
+	var resetCode string
+	const maxAttempts = 5
+	for i := 0; i < maxAttempts; i++ {
+		resetCode = utils.GenerateResetCode()
+		passwordReset := &models.PasswordReset{
+			ID:        uuid.New(),
+			UserID:    user.ID,
+			ResetCode: resetCode,
+			ExpiresAt: time.Now().Add(1 * time.Hour),
+			Used:      false,
+		}
 
-	// Create password reset record
-	passwordReset := &models.PasswordReset{
-		ID:        uuid.New(),
-		UserID:    user.ID,
-		ResetCode: resetCode,
-		ExpiresAt: time.Now().Add(1 * time.Hour),
-		Used:      false,
+		if err := database.DB.Create(passwordReset).Error; err != nil {
+			// Si choca por duplicado, seguimos intentando
+			if strings.Contains(err.Error(), "idx_password_resets_reset_code") {
+				continue
+			}
+			return "", fmt.Errorf("failed to crear el código de recuperación, intenta de nuevo")
+		}
+
+		// Mandamos el codigo por correo si hay
+		if user.Email != nil {
+			_ = utils.SendPasswordResetEmail(*user.Email, resetCode)
+		}
+
+		return resetCode, nil
 	}
 
-	if err := database.DB.Create(passwordReset).Error; err != nil {
-		return "", fmt.Errorf("failed to create password reset: %w", err)
-	}
-
-	// Send reset code via email
-	if user.Email != nil {
-		_ = utils.SendPasswordResetEmail(*user.Email, resetCode)
-	}
-
-	return resetCode, nil
+	return "", fmt.Errorf("no pudimos generar un código de recuperación, por favor intenta nuevamente")
 }
 
-// VerifyResetCode verifies a reset code and updates the password
+// VerifyResetCode valida el codigo y cambia la clave
 func VerifyResetCode(emailOrPhone, resetCode, newPassword string) error {
-	// Find user
+	// Buscamos user
 	var user models.User
 	if err := database.DB.Where("email = ? OR phone = ?", emailOrPhone, emailOrPhone).First(&user).Error; err != nil {
 		return fmt.Errorf("user not found")
 	}
 
-	// Find and validate reset code
+	// Buscamos y validamos el codigo
 	var passwordReset models.PasswordReset
 	if err := database.DB.Where("user_id = ? AND reset_code = ?", user.ID, resetCode).First(&passwordReset).Error; err != nil {
 		return fmt.Errorf("invalid reset code")
 	}
 
-	// Check if code is expired
+	// Revisamos expiracion
 	if time.Now().After(passwordReset.ExpiresAt) {
 		return fmt.Errorf("reset code expired")
 	}
 
-	// Check if code was already used
+	// Revisamos si ya fue usado
 	if passwordReset.Used {
 		return fmt.Errorf("reset code already used")
 	}
 
-	// Validate new password
+	// Revisamos la clave nueva
 	if !utils.ValidatePassword(newPassword) {
 		return fmt.Errorf("password must be at least 8 characters")
 	}
 
-	// Hash new password
+	// Hasheamos la clave nueva
 	passwordHash, err := utils.HashPassword(newPassword)
 	if err != nil {
 		return fmt.Errorf("failed to hash password: %w", err)
 	}
 
-	// Update user password
+	// Guardamos la nueva clave
 	if err := database.DB.Model(&user).Update("password_hash", passwordHash).Error; err != nil {
 		return fmt.Errorf("failed to update password: %w", err)
 	}
 
-	// Mark reset code as used
+	// Marcamos codigo como usado
 	if err := database.DB.Model(&passwordReset).Update("used", true).Error; err != nil {
-		return fmt.Errorf("failed to mark reset code as used: %w", err)
+		return fmt.Errorf("failed to mark reset code as used")
 	}
 
 	return nil

@@ -8,20 +8,20 @@ import (
 	"github.com/leunameek/celestexmewave/internal/services"
 )
 
-// UpdateProfileRequest represents a profile update request
+// Peti pa actualizar perfil
 type UpdateProfileRequest struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Phone     string `json:"phone"`
 }
 
-// ChangePasswordRequest represents a password change request
+// Peti pa cambiar clave
 type ChangePasswordRequest struct {
 	CurrentPassword string `json:"current_password" binding:"required"`
 	NewPassword     string `json:"new_password" binding:"required"`
 }
 
-// GetProfile retrieves the user's profile
+// Traer el perfil del user
 func GetProfile(c *gin.Context) {
 	userIDStr, exists := c.Get("user_id")
 	if !exists {
@@ -53,7 +53,7 @@ func GetProfile(c *gin.Context) {
 	})
 }
 
-// UpdateProfile updates the user's profile
+// Actualizar perfil del user
 func UpdateProfile(c *gin.Context) {
 	userIDStr, exists := c.Get("user_id")
 	if !exists {
@@ -90,7 +90,7 @@ func UpdateProfile(c *gin.Context) {
 	})
 }
 
-// ChangePassword changes the user's password
+// Cambiar la clave del user
 func ChangePassword(c *gin.Context) {
 	userIDStr, exists := c.Get("user_id")
 	if !exists {
@@ -117,11 +117,11 @@ func ChangePassword(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "password changed successfully",
+		"message": "contraseña cambiada exitosamente",
 	})
 }
 
-// DeleteProfile deletes the user's profile
+// Borrar el perfil del user
 func DeleteProfile(c *gin.Context) {
 	userIDStr, exists := c.Get("user_id")
 	if !exists {

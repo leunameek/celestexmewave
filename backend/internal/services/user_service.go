@@ -9,7 +9,7 @@ import (
 	"github.com/leunameek/celestexmewave/models"
 )
 
-// GetUserProfile retrieves a user's profile
+// GetUserProfile trae el perfil del user
 func GetUserProfile(userID uuid.UUID) (*models.User, error) {
 	var user models.User
 	if err := database.DB.First(&user, "id = ?", userID).Error; err != nil {
@@ -18,14 +18,14 @@ func GetUserProfile(userID uuid.UUID) (*models.User, error) {
 	return &user, nil
 }
 
-// UpdateUserProfile updates a user's profile
+// UpdateUserProfile actualiza el perfil del user
 func UpdateUserProfile(userID uuid.UUID, firstName, lastName, phone string) (*models.User, error) {
 	var user models.User
 	if err := database.DB.First(&user, "id = ?", userID).Error; err != nil {
 		return nil, fmt.Errorf("user not found")
 	}
 
-	// Validate input
+	// Validamos los datos
 	if firstName != "" && !utils.ValidateName(firstName) {
 		return nil, fmt.Errorf("invalid first name")
 	}
@@ -38,7 +38,7 @@ func UpdateUserProfile(userID uuid.UUID, firstName, lastName, phone string) (*mo
 		return nil, fmt.Errorf("invalid phone format")
 	}
 
-	// Check if phone is already in use
+	// Revisamos si el telefono ya esta en uso
 	if phone != "" && (user.Phone == nil || phone != *user.Phone) {
 		var existingUser models.User
 		if err := database.DB.Where("phone = ?", phone).First(&existingUser).Error; err == nil {
@@ -46,7 +46,7 @@ func UpdateUserProfile(userID uuid.UUID, firstName, lastName, phone string) (*mo
 		}
 	}
 
-	// Update fields
+	// Campos a actualizar
 	updates := map[string]interface{}{}
 	if firstName != "" {
 		updates["first_name"] = firstName
@@ -65,7 +65,7 @@ func UpdateUserProfile(userID uuid.UUID, firstName, lastName, phone string) (*mo
 	return &user, nil
 }
 
-// GetUserOrders retrieves a user's orders
+// GetUserOrders trae pedidos del user
 func GetUserOrders(userID uuid.UUID, page, limit int) ([]models.Order, int64, error) {
 	var orders []models.Order
 	var total int64
@@ -79,12 +79,12 @@ func GetUserOrders(userID uuid.UUID, page, limit int) ([]models.Order, int64, er
 
 	offset := (page - 1) * limit
 
-	// Get total count
+	// Conteo total
 	if err := database.DB.Where("user_id = ?", userID).Model(&models.Order{}).Count(&total).Error; err != nil {
 		return nil, 0, fmt.Errorf("failed to count orders: %w", err)
 	}
 
-	// Get paginated orders
+	// Pedidos paginados
 	if err := database.DB.
 		Where("user_id = ?", userID).
 		Preload("OrderItems").
@@ -99,30 +99,30 @@ func GetUserOrders(userID uuid.UUID, page, limit int) ([]models.Order, int64, er
 	return orders, total, nil
 }
 
-// ChangeUserPassword changes a user's password
+// ChangeUserPassword cambia la clave del user
 func ChangeUserPassword(userID uuid.UUID, currentPassword, newPassword string) error {
 	var user models.User
 	if err := database.DB.First(&user, "id = ?", userID).Error; err != nil {
 		return fmt.Errorf("user not found")
 	}
 
-	// Verify current password
+	// Revisamos la clave actual
 	if !utils.VerifyPassword(user.PasswordHash, currentPassword) {
-		return fmt.Errorf("current password is incorrect")
+		return fmt.Errorf("tu contraseña actual no coincide con la ingresada")
 	}
 
-	// Validate new password
+	// Validamos la clave nueva
 	if !utils.ValidatePassword(newPassword) {
 		return fmt.Errorf("new password must be at least 8 characters long")
 	}
 
-	// Hash new password
+	// Hacemos hash de la clave nueva
 	hashedPassword, err := utils.HashPassword(newPassword)
 	if err != nil {
 		return fmt.Errorf("failed to hash password: %w", err)
 	}
 
-	// Update password
+	// Guardamos la nueva clave
 	if err := database.DB.Model(&user).Update("password_hash", hashedPassword).Error; err != nil {
 		return fmt.Errorf("failed to update password: %w", err)
 	}
@@ -130,9 +130,9 @@ func ChangeUserPassword(userID uuid.UUID, currentPassword, newPassword string) e
 	return nil
 }
 
-// DeleteUser deletes a user account
+// DeleteUser borra la cuenta del user
 func DeleteUser(userID uuid.UUID) error {
-	// Delete user (assuming cascade deletes related data)
+	// Borramos el user (asumimos cascada)
 	if err := database.DB.Delete(&models.User{}, "id = ?", userID).Error; err != nil {
 		return fmt.Errorf("failed to delete user: %w", err)
 	}

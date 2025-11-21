@@ -3,15 +3,15 @@ package utils
 import (
 	"fmt"
 	"net/smtp"
+	"strconv"
+	"strings"
 
 	"github.com/leunameek/celestexmewave/internal/config"
 )
 
-// SendEmail sends an email using SMTP
 func SendEmail(to, subject, body string) error {
 	cfg := config.Get()
 
-	// Skip email sending if SMTP credentials are not configured
 	if cfg.SMTPUser == "" || cfg.SMTPPass == "" {
 		fmt.Printf("[EMAIL MOCK] To: %s\nSubject: %s\nBody:\n%s\n\n", to, subject, body)
 		return nil
@@ -25,80 +25,94 @@ func SendEmail(to, subject, body string) error {
 	err := smtp.SendMail(addr, auth, cfg.SMTPFrom, []string{to}, []byte(message))
 	if err != nil {
 		fmt.Printf("[EMAIL ERROR] Failed to send email to %s: %v\n", to, err)
-		// Don't return error to allow app to continue
 		return nil
 	}
 
 	return nil
 }
 
-// SendPasswordResetEmail sends a password reset email
+func formatPriceColombian(price float64) string {
+	intPrice := int(price)
+	str := strconv.Itoa(intPrice)
+
+	var parts []string
+	for len(str) > 3 {
+		parts = append([]string{str[len(str)-3:]}, parts...)
+		str = str[:len(str)-3]
+	}
+	if str != "" {
+		parts = append([]string{str}, parts...)
+	}
+	result := strings.Join(parts, ".")
+
+	return result
+}
+
 func SendPasswordResetEmail(to, resetCode string) error {
-	subject := "Password Reset Code - CelestexMewave"
+	subject := "Código de Restablecimiento de Contraseña - CelestexMewave"
 	body := fmt.Sprintf(`
-Hello,
+Hola,
 
-You requested a password reset for your CelestexMewave account.
+Has solicitado restablecer la contraseña de tu cuenta en CelestexMewave.
 
-Your reset code is: %s
+Tu código de restablecimiento es: %s
 
-This code will expire in 1 hour.
+Este código expirará en 1 hora.
 
-If you didn't request this, please ignore this email.
+Si no solicitaste esto, por favor ignora este correo.
 
-Best regards,
-CelestexMewave Team
+Saludos,
+Equipo de CelestexMewave
 `, resetCode)
 
 	return SendEmail(to, subject, body)
 }
 
-// SendOrderConfirmationEmail sends an order confirmation email
 func SendOrderConfirmationEmail(to, orderID string, totalAmount float64, items []map[string]interface{}) error {
-	subject := "Order Confirmation - CelestexMewave"
+	subject := "Confirmación de Pedido - CelestexMewave"
 
 	itemsHTML := ""
 	for _, item := range items {
-		itemsHTML += fmt.Sprintf("- %v x %v (Size: %v) - $%.2f\n",
+		price := item["unit_price"].(float64)
+		itemsHTML += fmt.Sprintf("- %v x %v (Talla: %v) - $%s\n",
 			item["product_name"],
 			item["quantity"],
 			item["size"],
-			item["unit_price"],
+			formatPriceColombian(price),
 		)
 	}
 
 	body := fmt.Sprintf(`
-Hello,
+Hola,
 
-Thank you for your purchase!
+¡Gracias por tu compra!
 
-Order ID: %s
-Total Amount: $%.2f
+ID del Pedido: %s
+Monto Total: $%s
 
-Items:
+Productos:
 %s
 
-Your order has been confirmed and will be processed shortly.
+Tu pedido ha sido confirmado y será procesado en breve.
 
-Best regards,
-CelestexMewave Team
-`, orderID, totalAmount, itemsHTML)
+Saludos,
+Equipo de CelestexMewave
+`, orderID, formatPriceColombian(totalAmount), itemsHTML)
 
 	return SendEmail(to, subject, body)
 }
 
-// SendRegistrationEmail sends a registration confirmation email
 func SendRegistrationEmail(to, firstName string) error {
-	subject := "Welcome to CelestexMewave"
+	subject := "Bienvenido a CelestexMewave"
 	body := fmt.Sprintf(`
-Hello %s,
+Hola %s,
 
-Welcome to CelestexMewave!
+¡Bienvenido a CelestexMewave!
 
-Your account has been successfully created. You can now login and start shopping.
+Tu cuenta ha sido creada exitosamente. Ya puedes iniciar sesión y comenzar a comprar.
 
-Best regards,
-CelestexMewave Team
+Saludos,
+Equipo de CelestexMewave
 `, firstName)
 
 	return SendEmail(to, subject, body)

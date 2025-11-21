@@ -8,11 +8,11 @@ import (
 	"github.com/leunameek/celestexmewave/models"
 )
 
-// GetOrCreateCart gets or creates a cart for a user or session
+// GetOrCreateCart trae o crea un carrito para user o sesion, sin misterio
 func GetOrCreateCart(userID *uuid.UUID, sessionID *string) (*models.Cart, error) {
 	var cart models.Cart
 
-	// Try to find existing cart
+	// Intentamos encontrar el carrito ya creado
 	query := database.DB
 	if userID != nil {
 		query = query.Where("user_id = ?", userID)
@@ -27,7 +27,7 @@ func GetOrCreateCart(userID *uuid.UUID, sessionID *string) (*models.Cart, error)
 		return &cart, nil
 	}
 
-	// Create new cart
+	// Crear carrito nuevo
 	cart = models.Cart{
 		ID:        uuid.New(),
 		UserID:    userID,
@@ -41,9 +41,9 @@ func GetOrCreateCart(userID *uuid.UUID, sessionID *string) (*models.Cart, error)
 	return &cart, nil
 }
 
-// AddItemToCart adds an item to the cart
+// AddItemToCart mete un item al carrito
 func AddItemToCart(cartID, productID uuid.UUID, quantity int, size string) (*models.CartItem, error) {
-	// Check if product exists and has stock
+	// Revisamos que el producto exista y tenga stock
 	var product models.Product
 	if err := database.DB.First(&product, "id = ?", productID).Error; err != nil {
 		return nil, fmt.Errorf("product not found")
@@ -53,7 +53,7 @@ func AddItemToCart(cartID, productID uuid.UUID, quantity int, size string) (*mod
 		return nil, fmt.Errorf("insufficient stock")
 	}
 
-	// Check if item already in cart
+	// Si ya esta en el carrito, solo sumamos cantidad
 	var existingItem models.CartItem
 	if err := database.DB.Where("cart_id = ? AND product_id = ? AND size = ?", cartID, productID, size).First(&existingItem).Error; err == nil {
 		// Update quantity
@@ -64,7 +64,7 @@ func AddItemToCart(cartID, productID uuid.UUID, quantity int, size string) (*mod
 		return &existingItem, nil
 	}
 
-	// Create new cart item
+	// Item nuevo en el carrito
 	cartItem := &models.CartItem{
 		ID:        uuid.New(),
 		CartID:    cartID,
@@ -80,14 +80,14 @@ func AddItemToCart(cartID, productID uuid.UUID, quantity int, size string) (*mod
 	return cartItem, nil
 }
 
-// UpdateCartItem updates a cart item
+// UpdateCartItem actualiza cantidad o talla
 func UpdateCartItem(itemID uuid.UUID, quantity int, size string) (*models.CartItem, error) {
 	var item models.CartItem
 	if err := database.DB.First(&item, "id = ?", itemID).Error; err != nil {
 		return nil, fmt.Errorf("cart item not found")
 	}
 
-	// Check stock
+	// Revisamos stock
 	var product models.Product
 	if err := database.DB.First(&product, "id = ?", item.ProductID).Error; err != nil {
 		return nil, fmt.Errorf("product not found")
@@ -109,7 +109,7 @@ func UpdateCartItem(itemID uuid.UUID, quantity int, size string) (*models.CartIt
 	return &item, nil
 }
 
-// RemoveCartItem removes an item from the cart
+// RemoveCartItem quita un item del carrito
 func RemoveCartItem(itemID uuid.UUID) error {
 	if err := database.DB.Delete(&models.CartItem{}, "id = ?", itemID).Error; err != nil {
 		return fmt.Errorf("failed to remove cart item: %w", err)
@@ -117,7 +117,7 @@ func RemoveCartItem(itemID uuid.UUID) error {
 	return nil
 }
 
-// ClearCart removes all items from a cart
+// ClearCart borra todo el carrito
 func ClearCart(cartID uuid.UUID) error {
 	if err := database.DB.Delete(&models.CartItem{}, "cart_id = ?", cartID).Error; err != nil {
 		return fmt.Errorf("failed to clear cart: %w", err)
@@ -125,7 +125,7 @@ func ClearCart(cartID uuid.UUID) error {
 	return nil
 }
 
-// GetCartItems retrieves all items in a cart
+// GetCartItems trae todos los items del carrito
 func GetCartItems(cartID uuid.UUID) ([]models.CartItem, error) {
 	var items []models.CartItem
 	if err := database.DB.
@@ -137,7 +137,7 @@ func GetCartItems(cartID uuid.UUID) ([]models.CartItem, error) {
 	return items, nil
 }
 
-// GetCartTotal calculates the total price of a cart
+// GetCartTotal calcula el total del carrito
 func GetCartTotal(cartID uuid.UUID) (float64, error) {
 	var total float64
 	if err := database.DB.

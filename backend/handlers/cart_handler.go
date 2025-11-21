@@ -9,7 +9,7 @@ import (
 	"github.com/leunameek/celestexmewave/internal/services"
 )
 
-// AddCartItemRequest represents a request to add an item to cart
+// Peticion pa meter item al carrito
 type AddCartItemRequest struct {
 	ProductID uuid.UUID `json:"product_id" binding:"required"`
 	Quantity  int       `json:"quantity" binding:"required,min=1"`
@@ -17,25 +17,25 @@ type AddCartItemRequest struct {
 	SessionID string    `json:"session_id"`
 }
 
-// UpdateCartItemRequest represents a request to update a cart item
+// Peticion pa actualizar item del carrito
 type UpdateCartItemRequest struct {
 	Quantity int    `json:"quantity" binding:"required,min=1"`
 	Size     string `json:"size"`
 }
 
-// GetCart retrieves the user's cart
+// Traer el carrito del user o de la sesion
 func GetCart(c *gin.Context) {
 	var userID *uuid.UUID
 	var sessionID *string
 
-	// Check if user is authenticated
+	// Miramos si esta autenticado
 	if userIDStr, exists := c.Get("user_id"); exists {
 		if parsed, err := uuid.Parse(userIDStr.(string)); err == nil {
 			userID = &parsed
 		}
 	}
 
-	// Get session ID from query or body
+	// Session id desde query
 	if sid := c.Query("session_id"); sid != "" {
 		sessionID = &sid
 	}
@@ -84,7 +84,7 @@ func GetCart(c *gin.Context) {
 	})
 }
 
-// AddItem adds an item to the cart
+// Agregar item al carrito
 func AddItem(c *gin.Context) {
 	var req AddCartItemRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -92,20 +92,20 @@ func AddItem(c *gin.Context) {
 		return
 	}
 
-	// Log the request
+	// Log del request pa ver que llega
 	log.Printf("AddItem request: %+v\n", req)
 
 	var userID *uuid.UUID
 	var sessionID *string
 
-	// Check if user is authenticated
+	// Miramos si esta autenticado
 	if userIDStr, exists := c.Get("user_id"); exists {
 		if parsed, err := uuid.Parse(userIDStr.(string)); err == nil {
 			userID = &parsed
 		}
 	}
 
-	// Use session ID from request or generate new one
+	// Usamos session que manden
 	if req.SessionID != "" {
 		sessionID = &req.SessionID
 	}
@@ -136,7 +136,7 @@ func AddItem(c *gin.Context) {
 	})
 }
 
-// UpdateItem updates a cart item
+// Actualizar item del carrito
 func UpdateItem(c *gin.Context) {
 	itemID, err := uuid.Parse(c.Param("item_id"))
 	if err != nil {
@@ -164,7 +164,7 @@ func UpdateItem(c *gin.Context) {
 	})
 }
 
-// RemoveItem removes an item from the cart
+// Quitar item del carrito
 func RemoveItem(c *gin.Context) {
 	itemID, err := uuid.Parse(c.Param("item_id"))
 	if err != nil {
@@ -180,19 +180,19 @@ func RemoveItem(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "item removed from cart"})
 }
 
-// ClearCart clears all items from the cart
+// Vaciar el carrito completo
 func ClearCart(c *gin.Context) {
 	var userID *uuid.UUID
 	var sessionID *string
 
-	// Check if user is authenticated
+	// Miramos si esta autenticado
 	if userIDStr, exists := c.Get("user_id"); exists {
 		if parsed, err := uuid.Parse(userIDStr.(string)); err == nil {
 			userID = &parsed
 		}
 	}
 
-	// Get session ID from query
+	// Sacamos session id
 	if sid := c.Query("session_id"); sid != "" {
 		sessionID = &sid
 	}

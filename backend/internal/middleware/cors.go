@@ -5,12 +5,12 @@ import (
 	"github.com/leunameek/celestexmewave/internal/config"
 )
 
-// CORSMiddleware handles CORS headers
+// CORSMiddleware mete los headers de CORS sin tanto complique
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		cfg := config.Get()
 
-		// Allow any origin in development
+		// Permitimos origen en dev, relax
 		origin := c.Request.Header.Get("Origin")
 		if origin != "" {
 			c.Writer.Header().Set("Access-Control-Allow-Origin", origin)

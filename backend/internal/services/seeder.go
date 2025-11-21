@@ -32,7 +32,7 @@ func SeedDatabase() error {
 	for _, store := range stores {
 		var existingStore models.Store
 		if err := database.DB.Where("name = ?", store.Name).First(&existingStore).Error; err != nil {
-			// Store doesn't exist, create it
+			// Si no existe, la creamos
 			store.ID = uuid.New()
 			if store.Name == "Celeste" {
 				celesteID = store.ID
@@ -43,7 +43,7 @@ func SeedDatabase() error {
 				return err
 			}
 		} else {
-			// Store exists, use its ID
+			// Si existe, usamos el ID que ya tiene
 			if store.Name == "Celeste" {
 				celesteID = existingStore.ID
 			} else {
@@ -53,21 +53,17 @@ func SeedDatabase() error {
 	}
 	log.Println("✓ Stores synced")
 
-	// Determine assets path
-	// Assuming running from backend/ directory
+	// Vemos la ruta de assets (asumimos backend/)
 	assetsPath := "../assets/products"
 	
-	// Check if we are in root or backend
+	// Si no existe, intentamos otra ruta
 	if _, err := os.Stat(assetsPath); os.IsNotExist(err) {
-		// Try absolute path or different relative path if needed
-		// For now, let's try to find it relative to current working directory
-		// If running from root: assets/products
 		if _, err := os.Stat("assets/products"); err == nil {
 			assetsPath = "assets/products"
 		}
 	}
 
-	// Load Celeste Products
+	// Cargamos productos de Celeste
 	celesteJSON := filepath.Join(assetsPath, "celeste.json")
 	if err := LoadProductsFromJSON(celesteID, "Celeste", celesteJSON); err != nil {
 		log.Printf("Warning: Failed to load Celeste products: %v", err)
@@ -75,7 +71,7 @@ func SeedDatabase() error {
 		log.Println("✓ Celeste products loaded")
 	}
 
-	// Load Mewave Products
+	// Cargamos productos de Mewave
 	mewaveJSON := filepath.Join(assetsPath, "mewave.json")
 	if err := LoadProductsFromJSON(mewaveID, "Mewave", mewaveJSON); err != nil {
 		log.Printf("Warning: Failed to load Mewave products: %v", err)

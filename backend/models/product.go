@@ -22,13 +22,11 @@ type Product struct {
 	CreatedAt      time.Time      `json:"created_at"`
 	UpdatedAt      time.Time      `json:"updated_at"`
 
-	// Relationships
 	Store      Store       `gorm:"foreignKey:StoreID" json:"-"`
 	CartItems  []CartItem  `gorm:"foreignKey:ProductID" json:"-"`
 	OrderItems []OrderItem `gorm:"foreignKey:ProductID" json:"-"`
 }
 
-// BeforeCreate hook to generate UUID
 func (p *Product) BeforeCreate(tx *gorm.DB) error {
 	if p.ID == uuid.Nil {
 		p.ID = uuid.New()
@@ -36,7 +34,6 @@ func (p *Product) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
-// SetSizes sets the sizes from a string slice
 func (p *Product) SetSizes(sizes []string) error {
 	data, err := json.Marshal(sizes)
 	if err != nil {
@@ -46,7 +43,6 @@ func (p *Product) SetSizes(sizes []string) error {
 	return nil
 }
 
-// GetSizes returns the sizes as a string slice
 func (p *Product) GetSizes() ([]string, error) {
 	var sizes []string
 	err := json.Unmarshal(p.Sizes, &sizes)

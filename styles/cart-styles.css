@@ -3,7 +3,7 @@
   grid-template-columns: 2fr 1fr;
   gap: 40px;
   padding: 20px;
-  margin: 60px auto;
+  margin: auto;
   max-width: 1200px;
   font-family: 'Montserrat', sans-serif;
 }
@@ -97,6 +97,7 @@
   border-radius: 10px;
   padding: 20px;
   background-color: #fff;
+  margin-bottom: 20px;
 }
 
 .summary-item {
@@ -132,6 +133,17 @@
 
 .proceed-btn:hover {
   background-color: #e73873;
+}
+
+.proceed-btn.disabled {
+  background-color: #ddd;
+  color: #666;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.proceed-btn.disabled:hover {
+  background-color: #ddd;
 }
 
 @media (max-width: 768px) {

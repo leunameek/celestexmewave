@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   const isCeleste = window.location.pathname.includes('celeste');
   const isMewave = window.location.pathname.includes('mewave');
-  let storeName = 'Celeste'; // default
+  let storeName = 'Celeste'; // por defecto pa no enredarnos
 
   if (isCeleste) {
     storeName = 'Celeste';
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
   apiClient.getAllProducts(storeName)
     .then(response => {
       const products = response.products || [];
-      console.log(`Fetched products for ${storeName}:`, products); // Debug log
+      console.log(`traidos productos de ${storeName}:`, products); // logcito de chisme
       const categories = {};
       products.forEach(product => {
         if (!categories[product.category]) {
@@ -93,5 +93,7 @@ function createProductCard(product) {
 }
 
 function formatPrice(price) {
-  return '$' + (price / 1000).toFixed(0) + '.000';
+  // Formato a lo paisa: sin centavos, solo miles
+  const intPrice = Math.floor(price);
+  return '$' + intPrice.toLocaleString('es-CO').replace(/,/g, '.');
 }
