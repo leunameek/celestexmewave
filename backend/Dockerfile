@@ -1,5 +1,5 @@
 # Multi-stage build for the Go API
-FROM golang:1.22-bullseye AS builder
+FROM golang:1.23.4-bullseye AS builder
 WORKDIR /app
 
 # Pre-fetch deps
