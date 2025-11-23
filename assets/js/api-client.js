@@ -360,6 +360,6 @@ class APIClient {
 // Instanciamos el cliente global pa no repetir codigo
 console.log('Initializing API Client...');
 window.apiClient = new APIClient(
-  localStorage.getItem('apiBaseURL') || 'http://localhost:8080'
+  localStorage.getItem('apiBaseURL') || 'https://celestexmewave-j6mg7.ondigitalocean.app'
 );
 console.log('API Client initialized:', window.apiClient);
