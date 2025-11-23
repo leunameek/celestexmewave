@@ -1,7 +1,7 @@
 // Todo lo serio de las peticiones pasa por aki, sin tanto protocolo
 
 class APIClient {
-  constructor(baseURL = 'http://localhost:8080') {
+  constructor(baseURL = 'https://celestexmewave-j6mg7.ondigitalocean.app') {
     this.baseURL = baseURL;
     this.accessToken = localStorage.getItem('accessToken');
     this.refreshToken = localStorage.getItem('refreshToken');
