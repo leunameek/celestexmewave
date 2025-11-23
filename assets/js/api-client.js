@@ -1,7 +1,7 @@
 // Todo lo serio de las peticiones pasa por aki, sin tanto protocolo
 
 class APIClient {
-  constructor(baseURL = 'http://localhost:8080') {
+  constructor(baseURL = 'celestexmewave-hr3kx.ondigitalocean.app') {
     this.baseURL = baseURL;
     this.accessToken = localStorage.getItem('accessToken');
     this.refreshToken = localStorage.getItem('refreshToken');
@@ -360,6 +360,6 @@ class APIClient {
 // Instanciamos el cliente global pa no repetir codigo
 console.log('Initializing API Client...');
 window.apiClient = new APIClient(
-  localStorage.getItem('apiBaseURL') || 'http://localhost:8080'
+  localStorage.getItem('apiBaseURL') || 'celestexmewave-hr3kx.ondigitalocean.app'
 );
 console.log('API Client initialized:', window.apiClient);
