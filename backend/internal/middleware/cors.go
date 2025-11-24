@@ -1,29 +1,35 @@
 package middleware
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
-	"github.com/leunameek/celestexmewave/internal/config"
 )
 
-// CORSMiddleware mete los headers de CORS sin tanto complique
 func CORSMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		cfg := config.Get()
+	allowedOrigins := map[string]struct{}{
+		"http://localhost:3000":                       {},
+		"https://leunameek.github.io":                 {},
+		"https://equally-polite-bunny.ngrok-free.app": {},
+	}
 
-		// Permitimos origen en dev, relax
-		origin := c.Request.Header.Get("Origin")
+	return func(c *gin.Context) {
+		origin := c.GetHeader("Origin")
 		if origin != "" {
-			c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
-		} else {
-			c.Writer.Header().Set("Access-Control-Allow-Origin", cfg.FrontendURL)
+			if _, ok := allowedOrigins[origin]; !ok {
+				c.AbortWithStatus(http.StatusForbidden)
+				return
+			}
+			c.Header("Access-Control-Allow-Origin", origin)
 		}
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE, PATCH")
-		c.Writer.Header().Set("Access-Control-Max-Age", "86400")
+
+		c.Header("Access-Control-Allow-Credentials", "true")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Header("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE, PATCH")
+		c.Header("Access-Control-Max-Age", "86400")
 
 		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
+			c.AbortWithStatus(http.StatusNoContent)
 			return
 		}
 

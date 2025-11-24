@@ -1,7 +1,7 @@
 // Todo lo serio de las peticiones pasa por aki, sin tanto protocolo
 
 class APIClient {
-  constructor(baseURL = 'celestexmewave-hr3kx.ondigitalocean.app') {
+  constructor(baseURL = 'https://equally-polite-bunny.ngrok-free.app') {
     this.baseURL = baseURL;
     this.accessToken = localStorage.getItem('accessToken');
     this.refreshToken = localStorage.getItem('refreshToken');
@@ -360,6 +360,6 @@ class APIClient {
 // Instanciamos el cliente global pa no repetir codigo
 console.log('Initializing API Client...');
 window.apiClient = new APIClient(
-  localStorage.getItem('apiBaseURL') || 'celestexmewave-hr3kx.ondigitalocean.app'
+  localStorage.getItem('apiBaseURL') || 'https://equally-polite-bunny.ngrok-free.app'
 );
 console.log('API Client initialized:', window.apiClient);
