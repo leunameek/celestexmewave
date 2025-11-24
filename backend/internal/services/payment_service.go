@@ -27,41 +27,7 @@ type PaymentResponse struct {
 
 // ProcessMockPayment procesa el pago de mentiras
 func ProcessMockPayment(orderID uuid.UUID, payment PaymentRequest) (*PaymentResponse, error) {
-	// Helper pa marcar como fallido y cancelar
-	markOrderFailed := func(reason string) {
-		_, _ = UpdatePaymentStatus(orderID, "failed")
-		_, _ = UpdateOrderStatus(orderID, "cancelled")
-	}
-
-	// Validamos los datos de la tarjeta
-	if !utils.ValidateCardNumber(payment.CardNumber) {
-		markOrderFailed("invalid card number")
-		return &PaymentResponse{
-			OrderID:       orderID.String(),
-			PaymentStatus: "failed",
-			Message:       "invalid card number",
-		}, nil
-	}
-
-	if !utils.ValidateCVV(payment.CVV) {
-		markOrderFailed("invalid CVV")
-		return &PaymentResponse{
-			OrderID:       orderID.String(),
-			PaymentStatus: "failed",
-			Message:       "invalid CVV",
-		}, nil
-	}
-
-	if !utils.ValidateExpiryDate(payment.ExpiryMonth, payment.ExpiryYear) {
-		markOrderFailed("card expired")
-		return &PaymentResponse{
-			OrderID:       orderID.String(),
-			PaymentStatus: "failed",
-			Message:       "card expired",
-		}, nil
-	}
-
-	// Pago mock: siempre pasa en modo demo
+	// Pago mock: siempre pasa en modo demo, sin validar nada de la tarjeta
 	transactionID := "TXN_" + orderID.String()[:8]
 
 	// Actualizamos status de pago

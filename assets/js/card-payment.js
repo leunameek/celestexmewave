@@ -136,39 +136,22 @@ document.addEventListener('DOMContentLoaded', function() {
   confirmBtn.addEventListener('click', async function(e) {
     e.preventDefault();
 
-    // Recolectamos los datos de la tarjeta
-    const cardNumber = cardNumberInput.value.replace(/\s/g, '');
-    const cardHolder = cardNameInput.value;
-    const expiry = cardExpiryInput.value;
-    const cvv = cardCvvInput.value;
+    // Recolectamos los datos de la tarjeta, pero sin bloquear (mock)
+    const rawCardNumber = cardNumberInput.value.replace(/\s/g, '') || '0000000000000000';
+    const cardNumber = rawCardNumber || '0000000000000000';
+    const cardHolder = cardNameInput.value || 'CLIENTE DEMO';
+    const expiryParts = cardExpiryInput.value.split('/');
+    let expiryMonth = parseInt(expiryParts[0]);
+    let expiryYear = 2000 + parseInt(expiryParts[1]);
+    const cvv = cardCvvInput.value || '000';
 
-    if (!cardNumber || !cardHolder || !expiry || !cvv) {
-      showNotification('Por favor complete toda la información de la tarjeta', 'error');
-      return;
+    // Fallbacks si la fecha viene incompleta o rara
+    if (isNaN(expiryMonth) || expiryMonth < 1 || expiryMonth > 12) {
+      expiryMonth = 12;
     }
-
-    // Validar la longitud del numero (13-19 digitos)
-    if (cardNumber.length < 13 || cardNumber.length > 19) {
-      showNotification('El número de tarjeta debe tener entre 13 y 19 dígitos', 'error');
-      return;
+    if (isNaN(expiryYear)) {
+      expiryYear = new Date().getFullYear() + 1;
     }
-
-    // Validar longitud del CVV
-    if (cvv.length < 3 || cvv.length > 4) {
-      showNotification('El CVV debe tener entre 3 y 4 dígitos', 'error');
-      return;
-    }
-
-    // Validar formato de fecha
-    const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
-    if (!expiryRegex.test(expiry)) {
-      showNotification('El formato de fecha de expiración debe ser MM/YY', 'error');
-      return;
-    }
-
-    const expiryParts = expiry.split('/');
-    const expiryMonth = parseInt(expiryParts[0]);
-    const expiryYear = 2000 + parseInt(expiryParts[1]);
 
     try {
       let orderId;

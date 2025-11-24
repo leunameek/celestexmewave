@@ -359,8 +359,8 @@ class APIClient {
 }
 
 // Instanciamos el cliente global pa no repetir codigo
-console.log('Initializing API Client...');
+//console.log('Initializing API Client...');
 window.apiClient = new APIClient(
   localStorage.getItem('apiBaseURL') || 'https://equally-polite-bunny.ngrok-free.app'
 );
-console.log('API Client initialized:', window.apiClient);
+//console.log('API Client initialized:', window.apiClient);

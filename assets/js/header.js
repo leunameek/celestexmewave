@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Chequeo rapido pa ver si esta logueado
         function checkAuthStatus() {
             const isAuth = typeof apiClient !== 'undefined' && apiClient.isAuthenticated();
-            console.log('Auth check:', isAuth, 'apiClient exists:', typeof apiClient !== 'undefined');
+            //console.log('Auth check:', isAuth, 'apiClient exists:', typeof apiClient !== 'undefined');
             return isAuth;
         }
 

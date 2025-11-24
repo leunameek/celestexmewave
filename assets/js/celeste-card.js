@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   apiClient.getAllProducts('Celeste')
     .then(response => {
       const products = response.products || [];
-      console.log('trajimos productos de Celeste:', products); // logcito para el chisme
+      //console.log('trajimos productos de Celeste:', products); // logcito para el chisme
       const categories = {};
       products.forEach(product => {
         if (!categories[product.category]) {
