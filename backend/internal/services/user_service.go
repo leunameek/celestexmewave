@@ -7,6 +7,7 @@ import (
 	"github.com/leunameek/celestexmewave/internal/database"
 	"github.com/leunameek/celestexmewave/internal/utils"
 	"github.com/leunameek/celestexmewave/models"
+	"gorm.io/gorm"
 )
 
 // GetUserProfile trae el perfil del user
@@ -130,12 +131,54 @@ func ChangeUserPassword(userID uuid.UUID, currentPassword, newPassword string) e
 	return nil
 }
 
-// DeleteUser borra la cuenta del user
+// DeleteUser borra la cuenta del user y todo lo relacionado (cascada manual)
 func DeleteUser(userID uuid.UUID) error {
-	// Borramos el user (asumimos cascada)
-	if err := database.DB.Delete(&models.User{}, "id = ?", userID).Error; err != nil {
-		return fmt.Errorf("failed to delete user: %w", err)
-	}
+	return database.DB.Transaction(func(tx *gorm.DB) error {
+		// 1. Borrar items de ordenes del usuario (via orders)
+		// Primero buscamos los IDs de las ordenes
+		var orderIDs []uuid.UUID
+		if err := tx.Model(&models.Order{}).Where("user_id = ?", userID).Pluck("id", &orderIDs).Error; err != nil {
+			return err
+		}
 
-	return nil
+		if len(orderIDs) > 0 {
+			if err := tx.Where("order_id IN ?", orderIDs).Delete(&models.OrderItem{}).Error; err != nil {
+				return err
+			}
+		}
+
+		// 2. Borrar ordenes
+		if err := tx.Where("user_id = ?", userID).Delete(&models.Order{}).Error; err != nil {
+			return err
+		}
+
+		// 3. Borrar items del carrito (via carts)
+		var cartIDs []uuid.UUID
+		if err := tx.Model(&models.Cart{}).Where("user_id = ?", userID).Pluck("id", &cartIDs).Error; err != nil {
+			return err
+		}
+
+		if len(cartIDs) > 0 {
+			if err := tx.Where("cart_id IN ?", cartIDs).Delete(&models.CartItem{}).Error; err != nil {
+				return err
+			}
+		}
+
+		// 4. Borrar carritos
+		if err := tx.Where("user_id = ?", userID).Delete(&models.Cart{}).Error; err != nil {
+			return err
+		}
+
+		// 5. Borrar resets de password
+		if err := tx.Where("user_id = ?", userID).Delete(&models.PasswordReset{}).Error; err != nil {
+			return err
+		}
+
+		// 6. Finalmente borrar el usuario
+		if err := tx.Delete(&models.User{}, "id = ?", userID).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
