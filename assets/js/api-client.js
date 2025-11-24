@@ -16,6 +16,7 @@ class APIClient {
   getHeaders(includeAuth = true) {
     const headers = {
       'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': 'true',
     };
 
     if (includeAuth && this.accessToken) {
