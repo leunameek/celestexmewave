@@ -28,3 +28,12 @@ func cleanImagePath(path string) string {
 
 	return path
 }
+
+// imageURL arma la ruta publica para servir la imagen y salta el warning de ngrok
+func imageURL(path string) string {
+	cleaned := cleanImagePath(path)
+	if cleaned == "" {
+		return ""
+	}
+	return "/api/products/images/" + cleaned + "?ngrok-skip-browser-warning=true"
+}

@@ -65,7 +65,7 @@ func GetAllProducts(c *gin.Context) {
 			"category":        product.Category,
 			"price":           product.Price,
 			"available_units": product.AvailableUnits,
-			"image_url":       "/api/products/images/" + cleanImagePath(product.ImagePath),
+			"image_url":       imageURL(product.ImagePath),
 			"sizes":           sizes,
 		})
 	}
@@ -102,7 +102,7 @@ func GetProductByID(c *gin.Context) {
 		"category":        product.Category,
 		"price":           product.Price,
 		"available_units": product.AvailableUnits,
-		"image_url":       "/api/products/images/" + filepath.Base(product.ImagePath),
+		"image_url":       imageURL(product.ImagePath),
 		"sizes":           sizes,
 		"created_at":      product.CreatedAt,
 	})
@@ -149,7 +149,7 @@ func GetProductsByStore(c *gin.Context) {
 			"category":        product.Category,
 			"price":           product.Price,
 			"available_units": product.AvailableUnits,
-			"image_url":       "/api/products/images/" + cleanImagePath(product.ImagePath),
+			"image_url":       imageURL(product.ImagePath),
 			"sizes":           sizes,
 		})
 	}
@@ -198,7 +198,7 @@ func GetProductsByCategory(c *gin.Context) {
 			"category":        product.Category,
 			"price":           product.Price,
 			"available_units": product.AvailableUnits,
-			"image_url":       "/api/products/images/" + cleanImagePath(product.ImagePath),
+			"image_url":       imageURL(product.ImagePath),
 			"sizes":           sizes,
 		})
 	}

@@ -72,7 +72,7 @@ func GetCart(c *gin.Context) {
 			"quantity":     item.Quantity,
 			"size":         item.Size,
 			"price":        item.Product.Price,
-			"image_url":    "/api/products/images/" + cleanImagePath(item.Product.ImagePath),
+			"image_url":    imageURL(item.Product.ImagePath),
 		})
 	}
 
