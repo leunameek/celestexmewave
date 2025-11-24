@@ -84,7 +84,7 @@ func Load() (*Config, error) {
 		FrontendURL: getEnv("FRONTEND_URL", "http://localhost:3000"),
 
 		// File Upload
-		UploadDir:     getEnv("UPLOAD_DIR", "../assets/images"),
+		UploadDir:     resolveUploadDir(getEnv("UPLOAD_DIR", "../assets/images")),
 		MaxUploadSize: getEnvInt64("MAX_UPLOAD_SIZE", 5242880), // 5MB
 	}
 

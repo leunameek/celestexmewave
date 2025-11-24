@@ -8,6 +8,13 @@ RUN go mod download
 
 # Copy the rest and build
 COPY . .
+# Copy assets from parent directory (requires build context to be root)
+# If build context is backend/, this fails. We assume user might fix build context or we copy if available.
+# Actually, we can't copy from parent in Docker unless context allows.
+# But we can try to copy if it was in the context.
+# For now, let's assume the user runs docker build from root.
+# COPY ../assets /app/assets
+
 # Build a static binary to keep the final image small
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server ./cmd/api
 

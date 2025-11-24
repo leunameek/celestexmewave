@@ -42,7 +42,7 @@ function createProductCard(product) {
   card.className = 'producto-card';
 
   const img = document.createElement('img');
-  const imageUrl = product.image_url ? (apiClient.baseURL + product.image_url) : product.image;
+  const imageUrl = product.image_url ? ('../assets/images/' + product.image_url) : product.image;
   img.src = imageUrl;
   img.alt = product.name;
   card.appendChild(img);

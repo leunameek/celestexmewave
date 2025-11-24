@@ -116,7 +116,7 @@ function populateProductDetails(product) {
 
     // Imagen grande del producto
     const productImage = document.querySelector('.product-image');
-    const imageUrl = product.image_url ? (apiClient.baseURL + product.image_url) : product.image;
+    const imageUrl = product.image_url ? ('../assets/images/' + product.image_url) : product.image;
     productImage.innerHTML = `<img src="${imageUrl}" alt="${product.name}" class="main-image">`;
 
     // Miniaturas
@@ -181,7 +181,7 @@ function populateSidebar(products, category, currentProductName, store) {
         cardContainer.className = 'sidebar-product-card';
 
         const img = document.createElement('img');
-        const imageUrl = product.image_url ? (apiClient.baseURL + product.image_url) : product.image;
+        const imageUrl = product.image_url ? ('../assets/images/' + product.image_url) : product.image;
         img.src = imageUrl;
         img.alt = product.name;
         img.className = 'sidebar-product-image';

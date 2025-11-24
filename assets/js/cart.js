@@ -87,7 +87,7 @@ function createCartItemElement(item) {
 
     // Imagen del producto, si falla le mandamos placeholder
     const imageUrl = item.image_url
-        ? (apiClient.baseURL + item.image_url)
+        ? ('../assets/images/' + item.image_url)
         : '../assets/images/placeholder.png';
 
     cartItem.innerHTML = `

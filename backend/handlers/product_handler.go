@@ -226,15 +226,32 @@ func ServeImage(c *gin.Context) {
 		return
 	}
 
-	filepath := filepath.Join(cfg.UploadDir, filename)
+	// Log raw request
+	log.Printf("DEBUG: ServeImage requested filename: '%s'", filename)
+
+	// Construct full path
+	// Note: filename here is already "cleaned" by the router/URL construction if it came from our API
+	// But let's see what we actually get.
+	fullPath := filepath.Join(cfg.UploadDir, filename)
+
+	// Get absolute path for debugging
+	absPath, _ := filepath.Abs(fullPath)
+	log.Printf("DEBUG: ServeImage looking for file at: '%s' (Absolute: '%s')", fullPath, absPath)
 
 	// Check if file exists
-	log.Printf("Debug ServeImage: filename='%s', uploadDir='%s', fullPath='%s'", filename, cfg.UploadDir, filepath)
-	if _, err := os.Stat(filepath); os.IsNotExist(err) {
-		log.Printf("Debug ServeImage: File not found at %s", filepath)
+	if _, err := os.Stat(fullPath); os.IsNotExist(err) {
+		log.Printf("ERROR: ServeImage File NOT FOUND at '%s'", fullPath)
+		// List directory contents to see what's actually there
+		dir := filepath.Dir(fullPath)
+		files, _ := os.ReadDir(dir)
+		log.Printf("DEBUG: Listing directory '%s':", dir)
+		for _, f := range files {
+			log.Printf("  - %s", f.Name())
+		}
+
 		c.JSON(http.StatusNotFound, gin.H{"error": "image not found"})
 		return
 	}
 
-	c.File(filepath)
+	c.File(fullPath)
 }
