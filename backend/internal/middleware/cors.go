@@ -7,19 +7,11 @@ import (
 )
 
 func CORSMiddleware() gin.HandlerFunc {
-	allowedOrigins := map[string]struct{}{
-		"http://localhost:3000":                       {},
-		"https://leunameek.github.io":                 {},
-		"https://equally-polite-bunny.ngrok-free.app": {},
-	}
 
 	return func(c *gin.Context) {
 		origin := c.GetHeader("Origin")
+		// Allow all origins for debugging purposes
 		if origin != "" {
-			if _, ok := allowedOrigins[origin]; !ok {
-				c.AbortWithStatus(http.StatusForbidden)
-				return
-			}
 			c.Header("Access-Control-Allow-Origin", origin)
 		}
 

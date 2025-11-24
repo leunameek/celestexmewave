@@ -10,30 +10,25 @@ func cleanImagePath(path string) string {
 	// Normalizamos separadores a slash normal
 	path = strings.ReplaceAll(path, "\\", "/")
 
-	// Quitamos el prefijo ../assets/images/ si esta
-	if idx := strings.Index(path, "assets/images/"); idx != -1 {
-		return path[idx+len("assets/images/"):]
+	// Lista de prefijos a eliminar
+	prefixes := []string{
+		"../assets/images/",
+		"assets/images/",
+		"images/",
 	}
 
-	// Plan B: buscamos "images/"
-	if idx := strings.Index(path, "images/"); idx != -1 {
-		return path[idx+len("images/"):]
+	for _, prefix := range prefixes {
+		if idx := strings.Index(path, prefix); idx != -1 {
+			return path[idx+len(prefix):]
+		}
 	}
 
-	// Ultimo recurso: devolvemos solo el filename para no romper la URL (puede quedar en blanco)
-	parts := strings.Split(path, "/")
-	if len(parts) > 0 {
-		return parts[len(parts)-1]
-	}
-
+	// Si no coincide con ningun prefijo, devolvemos el path tal cual
+	// Esto permite que rutas como "celeste_images/foto.jpg" funcionen correctamente
 	return path
 }
 
-// imageURL arma la ruta publica para servir la imagen y salta el warning de ngrok
+// imageURL devuelve solo el path relativo para que el frontend lo busque en sus assets
 func imageURL(path string) string {
-	cleaned := cleanImagePath(path)
-	if cleaned == "" {
-		return ""
-	}
-	return "/api/products/images/" + cleaned + "?ngrok-skip-browser-warning=true"
+	return cleanImagePath(path)
 }
