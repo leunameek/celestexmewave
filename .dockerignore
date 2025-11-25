@@ -1,0 +1,21 @@
+.git
+.gitignore
+
+# OS/editor cruft
+**/.DS_Store
+**/Thumbs.db
+
+# Node/JS artefacts if present
+node_modules
+npm-debug.log
+yarn.lock
+pnpm-lock.yaml
+
+# Go build artefacts and local env files
+backend/.env
+backend/main
+backend/api
+backend/bin
+backend/tmp
+backend/coverage
+backend/*.out

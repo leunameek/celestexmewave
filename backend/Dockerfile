@@ -1,32 +1,50 @@
-# Multi-stage build for the Go API
-FROM golang:1.24-bullseye AS builder
+# syntax=docker/dockerfile:1
+
+ARG GO_VERSION=1.22
+
+FROM golang:${GO_VERSION}-bookworm AS builder
 WORKDIR /app
 
-# Pre-fetch deps
-COPY go.mod go.sum ./
+# Faster, reproducible builds
+ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+
+# Only copy what is needed to download deps
+COPY backend/go.mod backend/go.sum ./
 RUN go mod download
 
-# Copy the rest and build
-COPY . .
-# Copy assets from parent directory (requires build context to be root)
-# If build context is backend/, this fails. We assume user might fix build context or we copy if available.
-# Actually, we can't copy from parent in Docker unless context allows.
-# But we can try to copy if it was in the context.
-# For now, let's assume the user runs docker build from root.
-# COPY ../assets /app/assets
+# Copy source code
+COPY backend/. .
 
-# Build a static binary to keep the final image small
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server ./cmd/api
+# Build the API binary
+RUN go build -trimpath -ldflags="-s -w" -o /out/server ./cmd/api
 
-# Minimal runtime image with certs for TLS DB connections (e.g., Supabase)
+
 FROM alpine:3.20
-RUN apk add --no-cache ca-certificates
 WORKDIR /app
-COPY --from=builder /app/server /app/server
 
-# Default port; override with SERVER_PORT if needed
-ENV SERVER_HOST=0.0.0.0 \
-    SERVER_PORT=8080
+# Add minimal runtime deps and a non-root user
+RUN apk add --no-cache ca-certificates tzdata curl \
+  && addgroup -S app && adduser -S -G app app
+
+# Copy binary and static assets (build from repo root so assets/ is in the context)
+COPY --from=builder /out/server /app/server
+COPY assets /app/assets
+
+# Entry script to honor DigitalOcean's PORT env var
+COPY backend/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh && chown -R app:app /app
+
+USER app
+
+# Sensible defaults; override in your deployment
+ENV GIN_MODE=release \
+    SERVER_HOST=0.0.0.0 \
+    SERVER_PORT=8080 \
+    UPLOAD_DIR=/app/assets/images
 
 EXPOSE 8080
-CMD ["./server"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -fsS http://127.0.0.1:${SERVER_PORT}/health || exit 1
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/app/server"]
